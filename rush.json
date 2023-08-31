@@ -390,12 +390,12 @@
    */
   "projects": [
       {
-        "packageName": "runbotics-windows-actions",
-        "projectFolder": "runbotics-windows-actions"
+        "packageName": "runbotics-office-actions",
+        "projectFolder": "runbotics-office-actions"
       },
       {
-        "packageName": "a41-custom-actions",
-        "projectFolder": "a41-custom-actions"
+        "packageName": "runbotics-sap-actions",
+        "projectFolder": "runbotics-sap-actions"
       }
     // {
     //   /**

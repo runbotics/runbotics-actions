@@ -1,0 +1,11 @@
+version: "3.7"
+
+services:
+    runbotics-office-actions:
+        build:
+            context: "."
+            dockerfile: "./Dockerfile"
+            args:
+                EXTENSION_NAME: "runbotics-office-actions"
+        volumes:
+            - "~/volumes/runbotics/runbotics-extensions/:/runbotics-extensions"

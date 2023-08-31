@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./packages/runbotics-actions-windows",
+    "baseUrl": "./packages/runbotics-sap-actions",
     "outDir": "dist",
     "module": "esnext",
     "lib": ["dom", "esnext"],
