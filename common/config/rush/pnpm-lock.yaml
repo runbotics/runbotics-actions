@@ -7,7 +7,6 @@ importers:
 
   ../../runbotics-office-actions:
     specifiers:
-      '@nestjs/common': ^8.4.2
       '@runbotics/runbotics-sdk': ^1.1.0
       '@types/node': ^18.11.18
       microbundle: ^0.13.3
@@ -17,7 +16,6 @@ importers:
       typescript: ^4.3.5
       winax: 3.3.4
     dependencies:
-      '@nestjs/common': 8.4.7_atc7tu2sld2m3nk4hmwkqn6qde
       reflect-metadata: 0.1.13
       rxjs: 7.8.1
       winax: 3.3.4

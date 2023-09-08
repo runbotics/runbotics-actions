@@ -20,6 +20,6 @@
     "noUnusedParameters": false,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src"],
+  "include": ["src", "src/.Multithread"],
   "exclude": ["node_modules", "dist"]
 }

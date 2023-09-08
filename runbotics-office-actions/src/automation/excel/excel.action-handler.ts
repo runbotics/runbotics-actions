@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 import {
     ExcelActionRequest,
@@ -27,8 +26,8 @@ import {
     ExcelCellValue,
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
-@Injectable()
-export default class ExcelActionHandler extends StatefulActionHandler {
+
+class ExcelActionHandler extends StatefulActionHandler {
     private session = null;
 
     constructor() {
@@ -633,3 +632,5 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         return (Number.isInteger(number) && number < 0)
     }
 }
+
+export default ExcelActionHandler;

@@ -2,10 +2,10 @@ import { Injectable } from "@nestjs/common";
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
-| DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
-| DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
-| DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
-| DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
+    | DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
+    | DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
+    | DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
+    | DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
 
 export type PowerPointOpenActionInput = {
     filePath: string;
@@ -23,7 +23,6 @@ export type PowerPointSaveActionOutput = any;
 export type PowerPointCloseActionInput = {};
 export type PowerPointCloseActionOutput = any;
 
-@Injectable()
 export default class PowerPointActionHandler extends StatefulActionHandler {
     private session = null;
     private openedFiles = null;
