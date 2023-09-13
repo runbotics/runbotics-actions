@@ -1,35 +1,30 @@
 import { DesktopRunRequest } from "@runbotics/runbotics-sdk";
 const { Worker } = require('worker_threads');
-import { Multithread } from "./multithread";
+import { WorkerMessageType } from "./types";
+import { MultithreadStateful } from "./MultithreadStateful";
 
-export class MultithreadRunner extends Multithread {
+export class MultithreadRunner extends MultithreadStateful {
     private worker = null;
 
-    constructor() {
+    constructor(handlerPath: string) {
         super();
-        this.startWorker();
+        this.startWorker(handlerPath);
     }
 
     async tearDown(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            console.debug('[MULTITHREAD_RUNNER] tearing down worker');
-            this.worker.postMessage({ shouldExit: true });
-        });
+        return await this.worker.postMessage({ type: WorkerMessageType.EXIT });
     }
 
     run(request: DesktopRunRequest<string, any>): Promise<any> {
         return new Promise((resolve, reject) => {
-            console.debug('[MULTITHREAD_RUNNER] sending request: ', request)
             const stringRequest = JSON.stringify(request)
-            this.worker.postMessage({ stringRequest });
+            this.worker.postMessage({ type: WorkerMessageType.RUN, stringRequest });
             this.onMessage(resolve, reject);
         });
     }
 
-    private async startWorker() {
-        console.debug('[MULTITHREAD_RUNNER] start');
-        this.worker = new Worker(__dirname + '/worker.js');
-        console.debug('[MULTITHREAD_RUNNER] created worker');
+    private async startWorker(handlerPath) {
+        this.worker = new Worker(__dirname + '/multithreading/worker.js', { workerData: { handlerPath } });
     }
 
     private async onMessage(resolve, reject, callback?: () => void) {
@@ -38,7 +33,6 @@ export class MultithreadRunner extends Multithread {
             resolve(result);
         });
         this.worker.on('error', (error) => {
-            console.error('got error: ', error);
             reject(error);
         });
     }

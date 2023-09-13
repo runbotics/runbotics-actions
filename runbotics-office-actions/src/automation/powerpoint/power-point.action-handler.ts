@@ -1,4 +1,3 @@
-import { Injectable } from "@nestjs/common";
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
