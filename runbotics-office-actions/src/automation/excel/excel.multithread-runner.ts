@@ -1,9 +1,7 @@
-import { ActionHandler, DesktopRunRequest } from "@runbotics/runbotics-sdk";
-import { MultithreadRunner } from "../../multithreading/multithreadRunner";
-import { MultithreadStateful } from "../../multithreading/MultithreadStateful";
+import { ActionHandler, DesktopRunRequest, MultithreadStateful, MultithreadRunner } from "@runbotics/runbotics-sdk";
 
 export class ExcelMultithreadRunner extends MultithreadStateful {
-    private handlerPath = '../automation/excel/excel.action-handler';
+    private handlerPath = '@runbotics/runbotics-actions/dist/automation/excel/excel.action-handler';
     private workerInstance = null;
 
     constructor() {
