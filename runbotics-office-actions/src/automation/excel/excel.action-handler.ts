@@ -1,4 +1,4 @@
-import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
+import { MultithreadStatefulActionHandler } from '@runbotics/runbotics-sdk';
 import {
     ExcelActionRequest,
     ExcelGetCellActionInput,
@@ -25,9 +25,9 @@ import {
     ExcelReadTableActionInput,
     ExcelCellValue,
 } from './excel.types';
-import ExcelErrorMessage from './excelErrorMessage';
+import ExcelErrorMessage from './excel.error-message';
 
-class ExcelActionHandler extends StatefulActionHandler {
+class ExcelActionHandler extends MultithreadStatefulActionHandler {
     private session = null;
 
     constructor() {
@@ -35,7 +35,7 @@ class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async open(input: ExcelOpenActionInput): Promise<void> {
-        const winax = await import('winax');
+        const winax = await import('winax').then((m) => m.default);
         this.session = new winax.Object('Excel.Application', {
             activate: true,
         });
