@@ -71,10 +71,13 @@ class ExcelActionHandler extends MultithreadStatefulActionHandler {
 
     async getCell(input: ExcelGetCellActionInput): Promise<unknown> {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
-        return this.session
+        const result = this.session
             .Worksheets(input.worksheet ?? this.session.ActiveSheet.Name)
             .Range(input.targetCell)
             .Value();
+        debugger;
+
+        return result
     }
 
     async getCells(input: ExcelGetCellsActionInput): Promise<unknown[][]> {
