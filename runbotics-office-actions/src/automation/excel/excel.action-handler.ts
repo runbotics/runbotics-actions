@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
+import { MultithreadStatefulActionHandler } from '@runbotics/runbotics-sdk';
 import {
     ExcelActionRequest,
     ExcelGetCellActionInput,
@@ -26,9 +25,9 @@ import {
     ExcelReadTableActionInput,
     ExcelCellValue,
 } from './excel.types';
-import ExcelErrorMessage from './excelErrorMessage';
-@Injectable()
-export default class ExcelActionHandler extends StatefulActionHandler {
+import ExcelErrorMessage from './excel.error-message';
+
+class ExcelActionHandler extends MultithreadStatefulActionHandler {
     private session = null;
 
     constructor() {
@@ -36,7 +35,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async open(input: ExcelOpenActionInput): Promise<void> {
-        const winax = await import('winax');
+        const winax = await import('winax').then((m) => m.default);
         this.session = new winax.Object('Excel.Application', {
             activate: true,
         });
@@ -72,10 +71,13 @@ export default class ExcelActionHandler extends StatefulActionHandler {
 
     async getCell(input: ExcelGetCellActionInput): Promise<unknown> {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
-        return this.session
+        const result = this.session
             .Worksheets(input.worksheet ?? this.session.ActiveSheet.Name)
             .Range(input.targetCell)
             .Value();
+        debugger;
+
+        return result
     }
 
     async getCells(input: ExcelGetCellsActionInput): Promise<unknown[][]> {
@@ -633,3 +635,5 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         return (Number.isInteger(number) && number < 0)
     }
 }
+
+export default ExcelActionHandler;

@@ -1,8 +1,5 @@
-import { Injectable } from '@nestjs/common';
-
-@Injectable()
 export default class ExcelErrorMessage {
-    constructor() {}
+    constructor() { }
 
     /* Incorrect action input */
 

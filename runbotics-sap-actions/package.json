@@ -23,7 +23,6 @@
   },
   "optionalDependencies": {},
   "dependencies": {
-    "@nestjs/common": "^8.4.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.5.5",
     "winax": "3.3.4"

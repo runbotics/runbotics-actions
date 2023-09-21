@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 
 
 import { SendVKeyMapper } from './SendVKeyMapper';
 import * as SapTypes from './types';
 
-@Injectable()
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
 
@@ -40,7 +38,7 @@ export default class SapActionHandler extends StatefulActionHandler {
 
     /**
      *  @name SAP: Start Transaction
-     *  @description Opens the transaction view. 
+     *  @description Opens the transaction view.
      *  Available transactions may vary depending on the instance that is being used.
      *  @param transaction - transaction name
      *  @example transaction: 'SE16N'
@@ -151,7 +149,7 @@ export default class SapActionHandler extends StatefulActionHandler {
     /**
      *  @name SAP: Send Virtual Key
      *  @description Emulates keyboard shortcut.
-     *  @param virtualKey - any keyboard shortcut that is supported 
+     *  @param virtualKey - any keyboard shortcut that is supported
      *  @see SendVKeyMapper - keymap file containing supported shortcuts
      *  @example virtualKey: Enter
      */
