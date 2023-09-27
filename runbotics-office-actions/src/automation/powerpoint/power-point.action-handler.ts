@@ -1,4 +1,3 @@
-import { Injectable } from "@nestjs/common";
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
@@ -23,7 +22,6 @@ export type PowerPointSaveActionOutput = any;
 export type PowerPointCloseActionInput = {};
 export type PowerPointCloseActionOutput = any;
 
-@Injectable()
 export default class PowerPointActionHandler extends StatefulActionHandler {
     private session = null;
     private openedFiles = null;

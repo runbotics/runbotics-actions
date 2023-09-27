@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 import XLSX from 'xlsx';
 import {
@@ -30,7 +29,7 @@ import {
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
 import { existsSync } from 'fs';
-@Injectable()
+
 export default class ExcelActionHandler extends StatefulActionHandler {
     private session = null;
 

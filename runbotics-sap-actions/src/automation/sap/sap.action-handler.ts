@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 
 
 import { SendVKeyMapper } from './SendVKeyMapper';
 import * as SapTypes from './types';
 
-@Injectable()
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
 
