@@ -28,7 +28,8 @@ export type ExcelActionRequest =
     | DesktopRunRequest<'excel.worksheetExists', ExcelWorksheetExistActionInput>
     | DesktopRunRequest<'excel.insertRowsAfter', ExcelInsertRowsActionInput>
     | DesktopRunRequest<'excel.deleteRows', ExcelDeleteRowsActionInput>
-    | DesktopRunRequest<'excel.readTable', ExcelReadTableActionInput>;
+    | DesktopRunRequest<'excel.readTable', ExcelReadTableActionInput>
+    | DesktopRunRequest<'excel.exportToCsv', ExcelExportToCsvActionInput>;
 
 export interface ExcelOpenActionInput {
     path: string;
@@ -144,6 +145,10 @@ export interface ExcelDeleteWorksheetActionInput {
 
 export interface ExcelDeleteWorksheetActionInput {
     worksheet: string;
+}
+
+export interface ExcelExportToCsvActionInput {
+    filePath: string;
 }
 
 export type ExcelCreateWorksheetActionOutput = string;

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
+import XLSX from 'xlsx';
 import {
     ExcelActionRequest,
     ExcelGetCellActionInput,
@@ -25,6 +26,7 @@ import {
     RegexPatterns,
     ExcelReadTableActionInput,
     ExcelCellValue,
+    ExcelExportToCsvActionInput,
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
 @Injectable()
@@ -288,6 +290,15 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
     }
 
+    async exportToCsv(input: ExcelExportToCsvActionInput): Promise<void> {
+        const pathWithoutExtension = input.filePath.match('(.*)xlsx$')[1];
+        const inputFilename = pathWithoutExtension + 'xlsx';
+        const outputFilename = pathWithoutExtension + 'csv';
+
+        const workBook = XLSX.readFile(inputFilename);
+        XLSX.writeFile(workBook, outputFilename, { bookType: 'csv' });
+    }
+
     async clearCells(input: ExcelClearCellsActionInput): Promise<void> {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
         const targetCells = this.parseOneDimensionalArray(input.targetCells);
@@ -434,11 +445,11 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     run(request: ExcelActionRequest) {
-        if (process.platform !== 'win32') {
+        if (process.platform !== 'win32' && request.script !== 'excel.exportToCsv') {
             throw new Error('Excel actions can be run only on Windows bot');
         }
 
-        if (request.script !== 'excel.open') {
+        if (!['excel.open', 'excel.exportToCsv'].includes(request.script)) {
             this.isApplicationOpen();
         }
 
@@ -489,6 +500,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
                 return this.close();
             case 'excel.readTable':
                 return this.readTable(request.input);
+            case 'excel.exportToCsv':
+                return this.exportToCsv(request.input);
             default:
                 throw new Error('Action not found');
         }
@@ -503,7 +516,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
      */
     private isApplicationOpen() {
         if (!this.session) {
-            throw new Error('There is no active Excel session. Open application before');
+            throw new Error(ExcelErrorMessage.getNoActiveSession());
         }
     }
 
