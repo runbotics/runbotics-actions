@@ -29,6 +29,7 @@ import {
     ExcelExportToCsvActionInput,
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
+import { existsSync } from 'fs';
 @Injectable()
 export default class ExcelActionHandler extends StatefulActionHandler {
     private session = null;
@@ -290,14 +291,19 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
     }
 
-    async exportToCsv(input: ExcelExportToCsvActionInput): Promise<void> {
+    async exportToCsv(input: ExcelExportToCsvActionInput): Promise<string> {
         const pathWithoutExtension = input.filePath.match('(.*)xlsx$')[1];
         const inputFilename = pathWithoutExtension + 'xlsx';
         const outputFilename = pathWithoutExtension + 'csv';
 
+        if (existsSync(outputFilename)) {
+            throw new Error(ExcelErrorMessage.exportToCsvFileAlreadyExists());
+        }
+
         const workBook = XLSX.readFile(inputFilename);
         // FS is only specified in ParsingOptions (e.g. readFile) but it works with writeFile as well.
         XLSX.writeFile(workBook, outputFilename, { bookType: 'csv', FS: ';' } as XLSX.WritingOptions);
+        return outputFilename;
     }
 
     async clearCells(input: ExcelClearCellsActionInput): Promise<void> {

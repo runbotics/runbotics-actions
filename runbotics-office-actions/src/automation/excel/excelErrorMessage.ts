@@ -121,15 +121,24 @@ export default class ExcelErrorMessage {
         `;
     }
 
+
     /* Other */
+
+    static exportToCsvFileAlreadyExists(): string {
+        return `
+            CSV File already exists. Remove or rename it.
+        `
+    }
+
+    static getNoActiveSession(): string {
+        return `
+            There is no active Excel session. Open application before
+        `;
+    }
 
     private static getCheckInputTip(): string {
         return `
             Check the input tab above.
-        `;
-    }
-
-    static getNoActiveSession(): string {
-        return `There is no active Excel session. Open application before`;
+            `;
     }
 }
