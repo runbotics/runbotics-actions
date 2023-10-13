@@ -296,7 +296,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         const outputFilename = pathWithoutExtension + 'csv';
 
         const workBook = XLSX.readFile(inputFilename);
-        XLSX.writeFile(workBook, outputFilename, { bookType: 'csv' });
+        // FS is only specified in ParsingOptions (e.g. readFile) but it works with writeFile as well.
+        XLSX.writeFile(workBook, outputFilename, { bookType: 'csv', FS: ';' } as XLSX.WritingOptions);
     }
 
     async clearCells(input: ExcelClearCellsActionInput): Promise<void> {
