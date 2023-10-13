@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export default class ExcelErrorMessage {
-    constructor() {}
+    constructor() { }
 
     /* Incorrect action input */
 
@@ -111,7 +111,7 @@ export default class ExcelErrorMessage {
         return `
             Column must be a string (e.g. "A").
             ${this.getCheckInputTip()}
-        `
+        `;
     }
 
     static tableNotFoundIncorrectInput(): string {
@@ -121,11 +121,24 @@ export default class ExcelErrorMessage {
         `;
     }
 
-    /* Tips */
+
+    /* Other */
+
+    static exportToCsvFileAlreadyExists(): string {
+        return `
+            CSV File already exists. Remove or rename it.
+        `
+    }
+
+    static getNoActiveSession(): string {
+        return `
+            There is no active Excel session. Open application before
+        `;
+    }
 
     private static getCheckInputTip(): string {
         return `
             Check the input tab above.
-        `
+            `;
     }
 }
