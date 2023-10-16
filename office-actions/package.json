@@ -1,13 +1,13 @@
 {
-    "name": "runbotics-office-actions",
+    "name": "office-actions",
     "version": "1.1.0",
     "type": "commonjs",
     "main": "dist/index.js",
     "module": "./dist/index.js",
     "source": "src/index.ts",
     "scripts": {
-        "build": "microbundle --no-compress --format cjs",
-        "start": "microbundle watch --no-compress --format cjs"
+        "build": "microbundle src/**/*.ts --target node --format cjs",
+        "start": "microbundle watch --target node --format cjs"
     },
     "author": {
         "name": "runbotics",
@@ -17,8 +17,7 @@
     "devDependencies": {
         "@types/node": "^18.11.18",
         "microbundle": "^0.13.3",
-        "tslib": "^2.3.0",
-        "typescript": "^4.3.5"
+        "typescript": "^5.2.2"
     },
     "dependencies": {
         "@runbotics/runbotics-sdk": "^1.1.0",

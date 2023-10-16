@@ -361,12 +361,12 @@
    */
     "projects": [
         {
-            "packageName": "runbotics-office-actions",
-            "projectFolder": "runbotics-office-actions"
+            "packageName": "office-actions",
+            "projectFolder": "office-actions"
         },
         {
-            "packageName": "runbotics-sap-actions",
-            "projectFolder": "runbotics-sap-actions"
+            "packageName": "sap-actions",
+            "projectFolder": "sap-actions"
         },
         {
             "packageName": "winax",
