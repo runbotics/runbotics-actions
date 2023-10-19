@@ -33,7 +33,7 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
     async open(
         input: PowerPointOpenActionInput
     ): Promise<PowerPointOpenActionOutput> {
-        const winax = await import('winax');
+        const winax = await import('@runbotics/winax');
 
         this.session = new winax.Object("PowerPoint.Application", {
             activate: true,

@@ -12,7 +12,7 @@ export default class SapActionHandler extends StatefulActionHandler {
     }
 
     async connect(input: SapTypes.SAPConnectActionInput): Promise<SapTypes.SAPConnectActionOutput> {
-        const winax = await import('winax');
+        const winax = await import('@runbotics/winax');
 
         try {
             const app = new winax.ActiveXObject('SapROTWr.SapROTWrapper');

@@ -21,7 +21,7 @@
     },
     "dependencies": {
         "@runbotics/runbotics-sdk": "^1.1.0",
-        "winax": "workspace:3.3.6"
+        "@runbotics/winax": "^3.4.1"
     },
     "files": [
         "dist"

@@ -38,7 +38,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async open(input: ExcelOpenActionInput): Promise<void> {
-        const winax = await import('winax');
+        const winax = await import('@runbotics/winax');
         this.session = new winax.Object('Excel.Application', {
             activate: true,
         });
