@@ -1,11 +1,9 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 
 
 import { SendVKeyMapper } from './SendVKeyMapper';
 import * as SapTypes from './types';
 
-@Injectable()
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
 
@@ -14,7 +12,7 @@ export default class SapActionHandler extends StatefulActionHandler {
     }
 
     async connect(input: SapTypes.SAPConnectActionInput): Promise<SapTypes.SAPConnectActionOutput> {
-        const winax = await import('winax');
+        const winax = await import('@runbotics/winax');
 
         try {
             const app = new winax.ActiveXObject('SapROTWr.SapROTWrapper');

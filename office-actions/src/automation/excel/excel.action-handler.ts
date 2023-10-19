@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 import XLSX from 'xlsx';
 import {
@@ -30,7 +29,7 @@ import {
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
 import { existsSync } from 'fs';
-@Injectable()
+
 export default class ExcelActionHandler extends StatefulActionHandler {
     private session = null;
 
@@ -39,7 +38,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async open(input: ExcelOpenActionInput): Promise<void> {
-        const winax = await import('winax');
+        const winax = await import('@runbotics/winax');
         this.session = new winax.Object('Excel.Application', {
             activate: true,
         });
