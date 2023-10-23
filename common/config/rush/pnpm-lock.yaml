@@ -11,8 +11,8 @@ importers:
   ../../office-actions:
     dependencies:
       '@runbotics/runbotics-sdk':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.2.1
+        version: 1.2.1
       '@runbotics/winax':
         specifier: ^3.4.1
         version: 3.4.1
@@ -33,8 +33,8 @@ importers:
   ../../sap-actions:
     dependencies:
       '@runbotics/runbotics-sdk':
-        specifier: ^1.1.0
-        version: 1.1.0
+        specifier: ^1.2.1
+        version: 1.2.1
       '@runbotics/winax':
         specifier: ^3.4.1
         version: 3.4.1
@@ -1649,8 +1649,8 @@ packages:
       rollup: 2.79.1
     dev: true
 
-  /@runbotics/runbotics-sdk@1.1.0:
-    resolution: {integrity: sha512-Uwp551iyHIc+3dhyZN34u8//FEeNGUFEM03cazgncKeD86vDw2boObEcbvhaJk29iEqGwpKxiscj8DB9snphuA==, tarball: https://npm.pkg.github.com/download/@runbotics/runbotics-sdk/1.1.0/97710866a411d957fc71e09ddf350b46db632fcf}
+  /@runbotics/runbotics-sdk@1.2.1:
+    resolution: {integrity: sha512-rAtyBeYrgZmA8XkLse7FMeHbVytRlK3Sxk7KBFam9fy0cNNS38t8C28BmPu8a0i9wx8pvnaExVsuR3bV1Y8B8Q==, tarball: https://npm.pkg.github.com/download/@runbotics/runbotics-sdk/1.2.1/d6352a3194fc804abe47a3395969377664c6b8ab}
     dev: false
 
   /@runbotics/winax@3.4.1:

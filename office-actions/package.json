@@ -1,6 +1,6 @@
 {
     "name": "office-actions",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "type": "commonjs",
     "main": "dist/index.js",
     "module": "./dist/index.js",
@@ -20,7 +20,7 @@
         "typescript": "^5.2.2"
     },
     "dependencies": {
-        "@runbotics/runbotics-sdk": "^1.1.0",
+        "@runbotics/runbotics-sdk": "^1.2.1",
         "@runbotics/winax": "^3.4.1",
         "xlsx": "^0.18.5"
     },
