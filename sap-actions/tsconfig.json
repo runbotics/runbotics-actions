@@ -24,10 +24,13 @@
         "allowSyntheticDefaultImports": true
     },
     "include": [
-        "src"
+        "src",
+        "test/sap.action-handler.test.ts"
     ],
     "exclude": [
         "node_modules",
-        "dist"
+        "dist",
+        "src/**/*.test.ts",
+        "test"
     ]
 }

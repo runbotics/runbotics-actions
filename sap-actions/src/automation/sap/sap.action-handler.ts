@@ -15,7 +15,7 @@ export default class SapActionHandler extends StatefulActionHandler {
         const winax = await import('@runbotics/winax');
 
         try {
-            const app = new winax.ActiveXObject('SapROTWr.SapROTWrapper');
+            const app = new winax.Object('SapROTWr.SapROTWrapper');
             const sapGuiAuto = app.GetROTEntry('SAPGUI');
             if (!sapGuiAuto) {
                 throw new Error('SAP application is not running');

@@ -1,0 +1,22 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug SAP Test File",
+            "autoAttachChildProcesses": true,
+            "skipFiles": [
+                "<node_internals>/**",
+                "**/node_modules/**"
+            ],
+            "program": "${workspaceRoot}/sap-actions/node_modules/vitest/vitest.mjs",
+            "args": [
+                "run",
+                "${relativeFile}"
+            ],
+            "smartStep": true,
+            "console": "integratedTerminal",
+        }
+    ]
+}
