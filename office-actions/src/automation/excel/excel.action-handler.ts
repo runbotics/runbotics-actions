@@ -291,18 +291,24 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async exportToCsv(input: ExcelExportToCsvActionInput): Promise<string> {
-        const pathWithoutExtension = input.filePath.match('(.*)xlsx$')[1];
-        const inputFilename = pathWithoutExtension + 'xlsx';
-        const outputFilename = pathWithoutExtension + 'csv';
+        const inputFilepath = input.filePath;
+        const pathMatch = inputFilepath.match('(.*)xlsx$');
 
-        if (existsSync(outputFilename)) {
+        if (!existsSync(inputFilepath) || !pathMatch) {
+            throw new Error(ExcelErrorMessage.exportToCsvFileIncorrectInput());
+        }
+
+        const pathWithoutExtension = pathMatch[1];
+        const outputFilepath = pathWithoutExtension + 'csv';
+
+        if (existsSync(outputFilepath)) {
             throw new Error(ExcelErrorMessage.exportToCsvFileAlreadyExists());
         }
 
-        const workBook = XLSX.readFile(inputFilename);
+        const workBook = XLSX.readFile(inputFilepath);
         // FS is only specified in ParsingOptions (e.g. readFile) but it works with writeFile as well.
-        XLSX.writeFile(workBook, outputFilename, { bookType: 'csv', FS: ';' } as XLSX.WritingOptions);
-        return outputFilename;
+        XLSX.writeFile(workBook, outputFilepath, { bookType: 'csv', FS: ';' } as XLSX.WritingOptions);
+        return outputFilepath;
     }
 
     async clearCells(input: ExcelClearCellsActionInput): Promise<void> {
