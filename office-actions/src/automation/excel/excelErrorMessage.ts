@@ -104,7 +104,6 @@ export default class ExcelErrorMessage {
         `;
     }
 
-
     static getColumnCoordinateIncorrectInput(): string {
         return `
             Column must be a string (e.g. "A").
@@ -119,6 +118,12 @@ export default class ExcelErrorMessage {
         `;
     }
 
+    static exportToCsvFileIncorrectInput(): string {
+        return `
+        The specified .xlsx file does not exist.
+        ${this.getCheckInputTip()}
+        `
+    }
 
     /* Other */
 
