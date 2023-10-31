@@ -292,9 +292,9 @@ export default class ExcelActionHandler extends StatefulActionHandler {
 
     async exportToCsv(input: ExcelExportToCsvActionInput): Promise<string> {
         const inputFilepath = input.filePath;
-        const pathMatch = inputFilepath.match('(.*)xlsx$');
+        const pathMatch = inputFilepath.match('(.*)xlsx?$');
 
-        if (!existsSync(inputFilepath) || !pathMatch) {
+        if (!existsSync(inputFilepath) || !pathMatch.length) {
             throw new Error(ExcelErrorMessage.exportToCsvFileIncorrectInput());
         }
 
