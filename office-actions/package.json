@@ -7,7 +7,11 @@
     "source": "src/index.ts",
     "scripts": {
         "build": "microbundle src/**/*.ts --target node --format cjs",
-        "start": "microbundle watch --target node --format cjs"
+        "start": "microbundle watch --target node --format cjs",
+        "test": "vitest",
+        "test:watch": "vitest dev",
+        "test:cov": "vitest run --coverage",
+        "test:debug": "vitest --inspect-brk --threads false"
     },
     "author": {
         "name": "runbotics",
@@ -17,7 +21,15 @@
     "devDependencies": {
         "@types/node": "^18.11.18",
         "microbundle": "^0.13.3",
-        "typescript": "^5.2.2"
+        "typescript": "^5.2.2",
+        "@nestjs/testing": "^9.2.0",
+        "@vitest/coverage-istanbul": "^0.29.8",
+        "vitest": "^0.29.8",
+        "@types/supertest": "^2.0.11",
+        "supertest": "^6.1.3",
+        "vite": "^4.2.1",
+        "is-html": "^3.0.0",
+        "@types/is-html": "^2.0.2"
     },
     "dependencies": {
         "@runbotics/runbotics-sdk": "^1.2.1",

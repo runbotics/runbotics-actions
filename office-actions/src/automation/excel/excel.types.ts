@@ -29,7 +29,8 @@ export type ExcelActionRequest =
     | DesktopRunRequest<'excel.insertRowsAfter', ExcelInsertRowsActionInput>
     | DesktopRunRequest<'excel.deleteRows', ExcelDeleteRowsActionInput>
     | DesktopRunRequest<'excel.readTable', ExcelReadTableActionInput>
-    | DesktopRunRequest<'excel.exportToCsv', ExcelExportToCsvActionInput>;
+    | DesktopRunRequest<'excel.exportToCsv', ExcelExportToCsvActionInput>
+    | DesktopRunRequest<'excel.rangeToHtmlTable', ExcelRangeToHtmlActionInput>;
 
 export interface ExcelOpenActionInput {
     path: string;
@@ -103,6 +104,13 @@ export interface CellCoordinates {
 
 export interface ExcelClearCellsActionInput {
     targetCells: string[] | string;
+    worksheet?: string;
+}
+
+export interface ExcelRangeToHtmlActionInput {
+    filePath: string;
+    cellRange: string;
+    headerRow?: string;
     worksheet?: string;
 }
 

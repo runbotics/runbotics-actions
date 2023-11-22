@@ -26,6 +26,7 @@ import {
     ExcelReadTableActionInput,
     ExcelCellValue,
     ExcelExportToCsvActionInput,
+    ExcelRangeToHtmlActionInput,
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
 import { existsSync } from 'fs';
@@ -323,6 +324,73 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
     }
 
+    async rangeToHtmlTable(input: ExcelRangeToHtmlActionInput): Promise<string> {
+        if (!input.filePath || !input.cellRange) {
+            throw new Error(ExcelErrorMessage.createHtmlTableRequiredFields());
+        }
+
+        try {
+            await this.open({
+                path: input.filePath,
+                worksheet: input.worksheet,
+                mode: 'xlReadWrite'
+            });
+
+            this.isApplicationOpen();
+
+            if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
+
+            const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
+            const rangeValues = targetWorksheet.Range(input.cellRange).Value();
+            const htmlTable = this.createHtmlTable(rangeValues, input.headerRow);
+
+            return htmlTable;
+        } catch (e) {
+            throw new Error(e.message);
+        } finally {
+            await this.close();
+        }
+    }
+
+    private createHtmlTable(data: unknown[][], row?: string) {
+        if (data === undefined || (data.length === 1 && data[0].length === 1)) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidCellRange());
+        }
+
+        if (row && (Number(row) <= 0 || Number(row) > data.length)) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidRow());
+        }
+
+        const headerRow = row && Number(row) > 0 ? Number(row) - 1 : 0;
+        const headers = data[headerRow];
+
+        const tableStyle = 'overflow: auto; border: 1px solid #dededf; height: 100%; width: 100%; table-layout: fixed; border-collapse: collapse; border-spacing: 1px;';
+        const thStyle = 'border: 1px solid #dededf; background-color: #eceff1; color: #000000; padding: 5px; text-align: left; height:20.4pt;';
+        const tdStyle = 'border: 1px solid #dededf; background-color: #ffffff; color: #000000; padding: 5px; text-align: left; height:14.4pt;';
+
+        let tableHtml = `<table style="${tableStyle}"><thead><tr>`;
+
+        for (const header of headers) {
+            tableHtml += `<th style="${thStyle}">${header ?? ''}</th>`;
+        }
+
+        tableHtml += '</tr></thead><tbody>';
+
+        for (let i = 0; i < data.length; i++) {
+            if (i !== headerRow) {
+                tableHtml += '<tr>';
+                for (const cell of data[i]) {
+                    tableHtml += `<td style="${tdStyle}">${cell ?? ''}</td>`;
+                }
+                tableHtml += '</tr>';
+            }
+        }
+
+        tableHtml += '</tbody></table>';
+
+        return tableHtml;
+    }
+
     async deleteWorksheet(input: ExcelDeleteWorksheetActionInput): Promise<void> {
         this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
@@ -461,7 +529,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error('Excel actions can be run only on Windows bot');
         }
 
-        if (!['excel.open', 'excel.exportToCsv'].includes(request.script)) {
+        if (!['excel.open', 'excel.exportToCsv', 'excel.rangeToHtmlTable'].includes(request.script)) {
             this.isApplicationOpen();
         }
 
@@ -514,6 +582,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
                 return this.readTable(request.input);
             case 'excel.exportToCsv':
                 return this.exportToCsv(request.input);
+            case 'excel.rangeToHtmlTable':
+                return this.rangeToHtmlTable(request.input);
             default:
                 throw new Error('Action not found');
         }
