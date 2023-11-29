@@ -30,7 +30,7 @@ export type ExcelActionRequest =
     | DesktopRunRequest<'excel.deleteRows', ExcelDeleteRowsActionInput>
     | DesktopRunRequest<'excel.readTable', ExcelReadTableActionInput>
     | DesktopRunRequest<'excel.exportToCsv', ExcelExportToCsvActionInput>
-    | DesktopRunRequest<'excel.rangeToHtmlTable', ExcelRangeToHtmlActionInput>;
+    | DesktopRunRequest<'excel.exportHtmlTable', ExcelExportHtmlTableActionInput>;
 
 export interface ExcelOpenActionInput {
     path: string;
@@ -107,7 +107,7 @@ export interface ExcelClearCellsActionInput {
     worksheet?: string;
 }
 
-export interface ExcelRangeToHtmlActionInput {
+export interface ExcelExportHtmlTableActionInput {
     filePath: string;
     cellRange: string;
     headerRow?: string;

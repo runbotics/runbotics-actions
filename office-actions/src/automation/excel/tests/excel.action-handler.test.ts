@@ -1,9 +1,9 @@
 import ExcelActionHandler from '../excel.action-handler';
-import { ExcelActionRequest, ExcelOpenActionInput, ExcelRangeToHtmlActionInput } from '../excel.types';
+import { ExcelActionRequest, ExcelOpenActionInput, ExcelExportHtmlTableActionInput } from '../excel.types';
 import isHtml from 'is-html';
 import ExcelErrorMessage from '../excelErrorMessage';
 
-const rangeToHtmlTableInput: ExcelRangeToHtmlActionInput = {
+const exportHtmlTableActionInput: ExcelExportHtmlTableActionInput = {
     filePath: `${__dirname}\\TEST.xlsx`,
     cellRange: 'D7:N23',
     headerRow: '7',
@@ -17,8 +17,8 @@ const excelOpenActionInput: ExcelOpenActionInput = {
 };
 
 const request: ExcelActionRequest = {
-    script: 'excel.rangeToHtmlTable',
-    input: rangeToHtmlTableInput,
+    script: 'excel.exportHtmlTable',
+    input: exportHtmlTableActionInput,
     processInstanceId: 'mock processInstanceId',
     rootProcessInstanceId: 'mock rootProcessInstanceId',
     userId: 2137,
@@ -39,7 +39,7 @@ describe('ExcelActionHandler', () => {
         expect(excelActionHandler).toBeDefined();
     });
 
-    describe('rangeToHtmlTable', () => {
+    describe('exportHtmlTable', () => {
         it('should return defined valid HTML string', async () => {
             const result = await excelActionHandler.run(request);
 

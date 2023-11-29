@@ -26,7 +26,7 @@ import {
     ExcelReadTableActionInput,
     ExcelCellValue,
     ExcelExportToCsvActionInput,
-    ExcelRangeToHtmlActionInput,
+    ExcelExportHtmlTableActionInput,
 } from './excel.types';
 import ExcelErrorMessage from './excelErrorMessage';
 import { existsSync } from 'fs';
@@ -324,7 +324,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
     }
 
-    async rangeToHtmlTable(input: ExcelRangeToHtmlActionInput): Promise<string> {
+    async exportHtmlTable(input: ExcelExportHtmlTableActionInput): Promise<string> {
         if (!input.filePath || !input.cellRange) {
             throw new Error(ExcelErrorMessage.createHtmlTableRequiredFields());
         }
@@ -529,7 +529,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error('Excel actions can be run only on Windows bot');
         }
 
-        if (!['excel.open', 'excel.exportToCsv', 'excel.rangeToHtmlTable'].includes(request.script)) {
+        if (!['excel.open', 'excel.exportToCsv', 'excel.exportHtmlTable'].includes(request.script)) {
             this.isApplicationOpen();
         }
 
@@ -582,8 +582,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
                 return this.readTable(request.input);
             case 'excel.exportToCsv':
                 return this.exportToCsv(request.input);
-            case 'excel.rangeToHtmlTable':
-                return this.rangeToHtmlTable(request.input);
+            case 'excel.exportHtmlTable':
+                return this.exportHtmlTable(request.input);
             default:
                 throw new Error('Action not found');
         }
