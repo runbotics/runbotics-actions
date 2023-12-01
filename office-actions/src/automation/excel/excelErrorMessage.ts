@@ -80,7 +80,7 @@ export default class ExcelErrorMessage {
     }
 
     static createHtmlTableRequiredFields(): string {
-        return 'Path to the file and cell range are required to run this action.';
+        return 'Cell range is required to run this action.';
     }
 
     static createHtmlTableInvalidCellRange(): string {

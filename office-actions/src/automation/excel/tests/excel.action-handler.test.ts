@@ -4,7 +4,6 @@ import isHtml from 'is-html';
 import ExcelErrorMessage from '../excelErrorMessage';
 
 const exportHtmlTableActionInput: ExcelExportHtmlTableActionInput = {
-    filePath: `${__dirname}\\TEST.xlsx`,
     cellRange: 'D7:N23',
     headerRow: '7',
     worksheet: undefined
@@ -40,6 +39,10 @@ describe('ExcelActionHandler', () => {
     });
 
     describe('exportHtmlTable', () => {
+        beforeEach(async () => await excelActionHandler.open(excelOpenActionInput));
+
+        afterAll(() => excelActionHandler.close());
+
         it('should return defined valid HTML string', async () => {
             const result = await excelActionHandler.run(request);
 
@@ -48,12 +51,12 @@ describe('ExcelActionHandler', () => {
             expect(isHtml(result)).toBe(true);
         });
 
-        it('should throw excel error createHtmlTableRequiredFields if not provided filePath or cellRange', async () => {
+        it('should throw excel error createHtmlTableRequiredFields if not provided cellRange', async () => {
             const invalidWorksheetRequest: ExcelActionRequest = {
                 ...request,
                 input: {
                     ...request.input,
-                    filePath: undefined,
+                    cellRange: undefined,
                 }
             };
 

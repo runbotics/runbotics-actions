@@ -325,19 +325,11 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     async exportHtmlTable(input: ExcelExportHtmlTableActionInput): Promise<string> {
-        if (!input.filePath || !input.cellRange) {
+        if (!input.cellRange) {
             throw new Error(ExcelErrorMessage.createHtmlTableRequiredFields());
         }
 
         try {
-            await this.open({
-                path: input.filePath,
-                worksheet: input.worksheet,
-                mode: 'xlReadWrite'
-            });
-
-            this.isApplicationOpen();
-
             if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
             const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
@@ -347,8 +339,6 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             return htmlTable;
         } catch (e) {
             throw new Error(e.message);
-        } finally {
-            await this.close();
         }
     }
 
@@ -529,7 +519,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error('Excel actions can be run only on Windows bot');
         }
 
-        if (!['excel.open', 'excel.exportToCsv', 'excel.exportHtmlTable'].includes(request.script)) {
+        if (!['excel.open', 'excel.exportToCsv'].includes(request.script)) {
             this.isApplicationOpen();
         }
 

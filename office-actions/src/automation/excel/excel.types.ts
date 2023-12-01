@@ -108,7 +108,6 @@ export interface ExcelClearCellsActionInput {
 }
 
 export interface ExcelExportHtmlTableActionInput {
-    filePath: string;
     cellRange: string;
     headerRow?: string;
     worksheet?: string;
