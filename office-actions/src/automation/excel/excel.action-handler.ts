@@ -329,17 +329,13 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error(ExcelErrorMessage.createHtmlTableRequiredFields());
         }
 
-        try {
-            if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
+        if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
-            const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
-            const rangeValues = targetWorksheet.Range(input.cellRange).Value();
-            const htmlTable = this.createHtmlTable(rangeValues, input.headerRow);
+        const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
+        const rangeValues = targetWorksheet.Range(input.cellRange).Value();
+        const htmlTable = this.createHtmlTable(rangeValues, input.headerRow);
 
-            return htmlTable;
-        } catch (e) {
-            throw new Error(e.message);
-        }
+        return htmlTable;
     }
 
     private createHtmlTable(data: unknown[][], row?: string) {

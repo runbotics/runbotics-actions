@@ -41,7 +41,7 @@ describe('ExcelActionHandler', () => {
     describe('exportHtmlTable', () => {
         beforeEach(async () => await excelActionHandler.open(excelOpenActionInput));
 
-        afterAll(() => excelActionHandler.close());
+        afterAll(async () => await excelActionHandler.tearDown());
 
         it('should return defined valid HTML string', async () => {
             const result = await excelActionHandler.run(request);
@@ -60,7 +60,7 @@ describe('ExcelActionHandler', () => {
                 }
             };
 
-            const call = async () => await excelActionHandler.run(invalidWorksheetRequest);
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
 
             try {
                 await call();
@@ -80,7 +80,7 @@ describe('ExcelActionHandler', () => {
                 }
             };
 
-            const call = async () => await excelActionHandler.run(invalidWorksheetRequest);
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
 
             try {
                 await call();
@@ -100,7 +100,7 @@ describe('ExcelActionHandler', () => {
                 }
             };
 
-            const call = async () => await excelActionHandler.run(invalidWorksheetRequest);
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
 
             try {
                 await call();
@@ -121,7 +121,7 @@ describe('ExcelActionHandler', () => {
                 }
             };
 
-            const call = async () => await excelActionHandler.run(invalidWorksheetRequest);
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
 
             try {
                 await call();
