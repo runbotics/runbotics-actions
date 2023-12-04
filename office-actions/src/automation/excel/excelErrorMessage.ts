@@ -79,6 +79,18 @@ export default class ExcelErrorMessage {
         `
     }
 
+    static createHtmlTableRequiredFields(): string {
+        return 'Cell range is required to run this action.';
+    }
+
+    static createHtmlTableInvalidCellRange(): string {
+        return 'Cell range must have at least two cells.';
+    }
+
+    static createHtmlTableInvalidRow(): string {
+        return 'Provided header row value is invalid. Must be positive number form cell range.';
+    }
+
     /* Incorrect utils input */
 
     static divideCellCoordinatesIncorrectInput(): string {
