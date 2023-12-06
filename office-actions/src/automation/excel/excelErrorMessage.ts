@@ -83,12 +83,20 @@ export default class ExcelErrorMessage {
         return 'Cell range is required to run this action.';
     }
 
+    static createHtmlTableInvalidRangeFormat(): string {
+        return 'Provided cell range is invalid. Range must match excel pattern (e.g. A123:B456).';
+    }
+
+    static createHtmlTableInvalidRowLevel(): string {
+        return 'Row level is optional. If provided must be positive number (e.g. 123).';
+    }
+
     static createHtmlTableInvalidCellRange(): string {
-        return 'Cell range must have at least two cells.';
+        return 'Cell range must have at least two cells (e.g. A1:B1 or A1:A2).';
     }
 
     static createHtmlTableInvalidRow(): string {
-        return 'Provided header row value is invalid. Must be positive number form cell range.';
+        return 'Provided header row value is invalid. Must be positive number form cell range (e.g. 123).';
     }
 
     /* Incorrect utils input */
