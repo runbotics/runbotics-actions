@@ -5,6 +5,7 @@ import ExcelErrorMessage from '../excelErrorMessage';
 
 const exportHtmlTableActionInput: ExcelExportHtmlTableActionInput = {
     cellRange: 'D7:N23',
+    rowLevel: '1',
     headerRow: '7',
     worksheet: undefined
 };
@@ -71,6 +72,26 @@ describe('ExcelActionHandler', () => {
             }
         });
 
+        it('should throw excel error createHtmlTableInvalidRangeFormat if provided invalid cellRange format', async () => {
+            const invalidWorksheetRequest: ExcelActionRequest = {
+                ...request,
+                input: {
+                    ...request.input,
+                    cellRange: '123A:B456:',
+                }
+            };
+
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
+
+            try {
+                await call();
+
+                expect(call).toThrow();
+            } catch (error) {
+                expect(error).toStrictEqual(new Error(ExcelErrorMessage.createHtmlTableInvalidRangeFormat()));
+            }
+        });
+
         it('should throw excel error worksheetIncorrectInput if worksheet does not exist', async () => {
             const invalidWorksheetRequest: ExcelActionRequest = {
                 ...request,
@@ -88,6 +109,26 @@ describe('ExcelActionHandler', () => {
                 expect(call).toThrow();
             } catch (error) {
                 expect(error).toStrictEqual(new Error(ExcelErrorMessage.worksheetIncorrectInput(true)));
+            }
+        });
+
+        it('should throw excel error createHtmlTableInvalidRowLevel if provided invalid rowLevel parameter', async () => {
+            const invalidWorksheetRequest: ExcelActionRequest = {
+                ...request,
+                input: {
+                    ...request.input,
+                    rowLevel: '-2',
+                }
+            };
+
+            const call = () => excelActionHandler.run(invalidWorksheetRequest);
+
+            try {
+                await call();
+
+                expect(call).toThrow();
+            } catch (error) {
+                expect(error).toStrictEqual(new Error(ExcelErrorMessage.createHtmlTableInvalidRowLevel()));
             }
         });
 

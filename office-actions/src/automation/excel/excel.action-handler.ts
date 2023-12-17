@@ -329,24 +329,51 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error(ExcelErrorMessage.createHtmlTableRequiredFields());
         }
 
+        // Excel range pattern (e.g. A123:E456)
+        if (!input.cellRange.match(/^[A-Za-z]+[0-9]+:[A-Za-z]+[0-9]+$/)) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidRangeFormat());
+        }
+
+        const splitCellRange = input.cellRange.split(':');
+        const isSingleCellRange = splitCellRange[0] === splitCellRange[1];
+        if (isSingleCellRange) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidCellRange());
+        }
+
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
         const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
-        const rangeValues = targetWorksheet.Range(input.cellRange).Value();
-        const htmlTable = this.createHtmlTable(rangeValues, input.headerRow);
+
+        const rowsRange = targetWorksheet.Range(input.cellRange).Rows;
+        const rowsCount = rowsRange.Count;
+
+        if (input.rowLevel && Number(input.rowLevel) <= 0) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidRowLevel());
+        }
+        const rowLevel = input.rowLevel ? Number(input.rowLevel) : 1;
+
+        const headerRow = input.headerRow;
+        if (headerRow && (Number(headerRow) <= 0 || Number(headerRow) > rowsCount)) {
+            throw new Error(ExcelErrorMessage.createHtmlTableInvalidRow());
+        }
+
+        const rangeValues = [];
+
+        for (let rowIdx = 1; rowIdx <= rowsCount; rowIdx++) {
+            const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
+            const rowValues = rowsRange.Rows(rowIdx).Value()[0];
+
+            if (rowOutlineLevel <= rowLevel) {
+                rangeValues.push(rowValues);
+            }
+        }
+
+        const htmlTable = this.createHtmlTable(rangeValues, headerRow);
 
         return htmlTable;
     }
 
     private createHtmlTable(data: unknown[][], row?: string) {
-        if (data === undefined || (data.length === 1 && data[0].length === 1)) {
-            throw new Error(ExcelErrorMessage.createHtmlTableInvalidCellRange());
-        }
-
-        if (row && (Number(row) <= 0 || Number(row) > data.length)) {
-            throw new Error(ExcelErrorMessage.createHtmlTableInvalidRow());
-        }
-
         const headerRow = row && Number(row) > 0 ? Number(row) - 1 : 0;
         const headers = data[headerRow];
 
