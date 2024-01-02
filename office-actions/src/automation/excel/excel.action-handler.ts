@@ -377,9 +377,9 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         const headerRow = row && Number(row) > 0 ? Number(row) - 1 : 0;
         const headers = data[headerRow];
 
-        const tableStyle = 'overflow: auto; border: 1px solid #dededf; height: 100%; width: 100%; table-layout: fixed; border-collapse: collapse; border-spacing: 1px;';
-        const thStyle = 'border: 1px solid #dededf; background-color: #eceff1; color: #000000; padding: 5px; text-align: left; height:20.4pt;';
-        const tdStyle = 'border: 1px solid #dededf; background-color: #ffffff; color: #000000; padding: 5px; text-align: left; height:14.4pt;';
+        const tableStyle = 'overflow: auto; border: 1px solid #dededf; height: 100%; table-layout: auto; border-collapse: collapse; border-spacing: 1px;';
+        const thStyle = 'border: 1px solid #dededf; background-color: #eceff1; color: #000000; padding: 5px 15px; text-align: left; height: 20.4pt; white-space: nowrap;';
+        const tdStyle = 'border: 1px solid #dededf; background-color: #ffffff; color: #000000; padding: 5px 15px; text-align: left; height: 14.4pt; white-space: nowrap;';
 
         let tableHtml = `<table style="${tableStyle}"><thead><tr>`;
 
