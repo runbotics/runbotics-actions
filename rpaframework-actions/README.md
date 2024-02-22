@@ -22,8 +22,9 @@ activate.bat
 pip install -r requirements.txt
 
 
-# build executables (from activated environment)
-pyinstaller --onefile <main_file_name>
+# in another cmd run to build executables
+# before you run, you need to install pyinstaller with custom bootloader
+build.bat
 
 
 # run

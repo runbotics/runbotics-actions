@@ -1,2 +1,2 @@
-pyinstaller==6.3.0
 rpaframework==28.2.0
+robocorp==1.6.2
