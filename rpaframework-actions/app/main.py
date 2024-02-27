@@ -3,41 +3,49 @@ import json
 import rpaframework.actions as actions
 import sys
 
-APP_VERSION = "1.0.0"
-
 sys.stdin.reconfigure(encoding='utf-8')
 sys.stdout.reconfigure(encoding='utf-8')
 
 def setup_args():
     parser = argparse.ArgumentParser(description='List of options for RPA Framework actions')
 
-    parser.add_argument('-windowTitle', '--windowTitle', required=True, help='Title of the app dialog')
+    parser.add_argument('-windowTitle', '--windowTitle', required=False, help='Title of the window dialog')
 
     group1 = parser.add_argument_group('Get Element')
-    group1.add_argument('-getElement', '--getElementLocator', help='Get Element locator')
+    group1.add_argument('-getElement', '--getElementLocator', help='Gets an window element by provided locator')
     group2 = parser.add_argument_group('Get Window Elements')
-    group2.add_argument('-getWindowElements', '--getWindowElements', nargs='?', const=True, help='Get Window Elements parameters in JSON format')
+    group2.add_argument('-getWindowElements', '--getWindowElements', nargs='?', const=True, help='Gets details of all currently running windows')
     group3 = parser.add_argument_group('Is Window Open')
-    group3.add_argument('-isWindowOpen', '--isWindowOpen', nargs='?', const=True, help='Check if window is open')
+    group3.add_argument('-isWindowOpen', '--isWindowOpen', nargs='?', const=True, help='Checks if provided window is open')
     group4 = parser.add_argument_group('Mouse Click')
-    group4.add_argument('-mouseClick', '--mouseClickJsonBody', help='Mouse Click parameters in JSON format')
+    group4.add_argument('-mouseClick', '--mouseClickLocator', help='Performs mouse click on the element by provided locator')
     group5 = parser.add_argument_group('Wait For Element')
-    group5.add_argument('-waitForElement', '--waitForElementJsonBody', help='Wait For Element parameters in JSON format')
+    group5.add_argument('-waitForElement', '--waitForElementLocator', help='Waits for a window element by provided locator')
     group6 = parser.add_argument_group('Press Keys')
-    group6.add_argument('-pressKeys', '--pressKeysJsonArray', help='Press keys in JSON Array format')
+    group6.add_argument('-pressKeys', '--pressKeysJsonArray', help='Presses key combination provided as JSON array')
     group7 = parser.add_argument_group('Send Keys')
-    group7.add_argument('-sendKeys', '--sendKeysJsonBody', help='Send keys parameters in JSON format')
+    group7.add_argument('-sendKeys', '--sendKeysJsonBody', help='Sends keys to specified element by provided locator')
     group8 = parser.add_argument_group('Minimize Window')
-    group8.add_argument('-minimizeWindow', '--minimizeWindowLocator', help='Minimize window locator')
+    group8.add_argument('-minimizeWindow', '--minimizeWindowLocator', help='Minimize window by provided locator')
     group9 = parser.add_argument_group('Maximize Window')
-    group9.add_argument('-maximizeWindow', '--maximizeWindowLocator', help='Maximize window locator')
+    group9.add_argument('-maximizeWindow', '--maximizeWindowLocator', help='Maximize window by provided locator')
     group10 = parser.add_argument_group('Close Window')
-    group10.add_argument('-closeWindow', '--closeWindowLocator', help='Close window locator')
+    group10.add_argument('-closeWindow', '--closeWindowLocator', help='Close window by provided locator')
 
     return parser.parse_args()
 
 def action_handler():
     args = setup_args()
+
+    if args.getWindowElements:
+        elements = actions.get_window_elements()
+        if not elements: raise ValueError(f"Cannot find window elements")
+
+        for element in elements:
+            element.pop('object')
+
+        print(json.dumps(elements))
+        return
 
     window_title = args.windowTitle
 
@@ -64,40 +72,15 @@ def action_handler():
 
         print(json.dumps(element_dict))
 
-    if args.getWindowElements:
-        elements = actions.get_window_elements()
-        if not elements: raise ValueError(f"Cannot find window elements")
+    if args.mouseClickLocator:
+        locator = args.mouseClickLocator
 
-        for element in elements:
-            element.pop('object')
+        actions.mouse_click(locator)
 
-        print(json.dumps(elements))
+    if args.waitForElementLocator:
+        locator = args.waitForElementLocator
 
-    if args.mouseClickJsonBody:
-        mouse_click_json = json.loads(args.mouseClickJsonBody)
-
-        locator = mouse_click_json.get('locator')
-        x = mouse_click_json.get('x')
-        y = mouse_click_json.get('y')
-
-        actions.mouse_click(locator, x, y)
-
-    if args.waitForElementJsonBody:
-        wait_for_element_json = json.loads(args.waitForElementJsonBody)
-
-        locator = wait_for_element_json.get('locator')
-        use_refreshing = wait_for_element_json.get('use_refreshing')
-        search_criteria= wait_for_element_json.get('search_criteria')
-        timeout= wait_for_element_json.get('timeout')
-        interval= wait_for_element_json.get('interval')
-
-        elements = actions.wait_for_element(
-            locator,
-            use_refreshing,
-            search_criteria,
-            timeout,
-            interval,
-        )
+        elements = actions.wait_for_element(locator)
         if not elements: raise ValueError(f"Cannot find elements for locator '{locator}'")
 
         for element in elements:
@@ -105,7 +88,6 @@ def action_handler():
             element.pop('control')
 
         print(json.dumps(elements))
-
 
     if args.pressKeysJsonArray:
         press_keys = json.loads(args.pressKeysJsonArray)
@@ -117,15 +99,11 @@ def action_handler():
 
         locator = send_keys_json.get('locator')
         keys = send_keys_json.get('keys')
-        interval = send_keys_json.get('interval')
-        wait_time = send_keys_json.get('wait_time')
         send_enter = send_keys_json.get('send_enter')
 
         actions.send_keys(
             locator,
             keys,
-            interval,
-            wait_time,
             send_enter
         )
 

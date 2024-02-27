@@ -11,22 +11,18 @@ The `rpa-framework-actions` is mini lib to be able to run `rpaframework` using n
 ## Project setup
 
 ```bash
+# open cmd terminal
 # setup virtual environment (Windows)
 # create .venv
 python -m venv .venv
-# activate virtual environment (cmd)
+# activate virtual environment
 activate.bat
-
-
 # install dependencies (from activated environment)
 pip install -r requirements.txt
 
 
-# in another cmd run to build executables
+# open another terminal and run to build executables
 # before you run, you need to install pyinstaller with custom bootloader
-build.bat
+./rpaframework-build.sh
 
-
-# run
-py <main_file_name> <options>
 ```

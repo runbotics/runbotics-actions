@@ -37,54 +37,33 @@ def get_window_elements():
     return win.list_windows()
 
 def mouse_click(
-    locator: str = None,
-    x: int = 0,
-    y: int = 0,
+    locator: str,
 ):
-    if x is None: x = 0
-    if y is None: y = 0
-
-    desk_win.mouse_click(locator, x, y)
+    desk_win.mouse_click(locator)
 
 def wait_for_element(
     locator: str,
-    use_refreshing: bool = False,
-    search_criteria: str = None,
-    timeout: float = 30.0,
-    interval: float = 2.0,
 ):
-    if use_refreshing is None: use_refreshing = False
-    if timeout is None: timeout = 30.0
-    if interval is None: interval = 2.0
-
     return desk_win.wait_for_element(
         locator,
-        use_refreshing,
-        search_criteria,
-        timeout,
-        interval
+        timeout=10.0
     )
 
-def press_keys(keys):
+def press_keys(keys: list[str]):
     keys_to_press = [key for key in keys if key is not None]
     desk.press_keys(*keys_to_press)
 
 def send_keys(
     locator: str | None,
     keys: str | None,
-    interval: float | None,
-    wait_time: float | None,
     send_enter: bool | None
 ):
-    if interval is None: interval = 0.1
     if send_enter is None: send_enter = False
 
     win.send_keys(
         locator,
         keys,
-        interval,
-        wait_time,
-        send_enter
+        send_enter=send_enter
     )
 
 def minimize_window(locator: str):
