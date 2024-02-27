@@ -1,0 +1,37 @@
+{
+    "name": "rpaframework-actions",
+    "version": "1.0.0",
+    "type": "commonjs",
+    "main": "dist/index.js",
+    "module": "./dist/index.js",
+    "source": "src/index.ts",
+    "scripts": {
+        "build": "microbundle src/**/*.ts --target node --format cjs",
+        "start": "microbundle watch --target node --format cjs",
+        "start:dev": "node src/index.ts",
+        "start:prod": "node dist/index.js",
+        "test": "vitest",
+        "test:watch": "vitest dev",
+        "test:cov": "vitest run --coverage",
+        "test:debug": "vitest --inspect-brk --threads false"
+    },
+    "author": {
+        "name": "runbotics",
+        "email": "contact@runbotics.com"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^18.11.18",
+        "microbundle": "^0.13.3",
+        "typescript": "^5.2.2",
+        "@vitest/coverage-istanbul": "^0.29.8",
+        "vitest": "^0.29.8",
+        "vite": "^4.2.1"
+    },
+    "dependencies": {
+        "@runbotics/runbotics-sdk": "^1.2.1"
+    },
+    "files": [
+        "dist"
+    ]
+}

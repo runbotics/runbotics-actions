@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "moduleResolution": "Node",
+        "lib": [
+            "ES2020"
+        ],
+        "module": "commonjs",
+        "target": "ES2019",
+        "sourceMap": true,
+        "baseUrl": "./src",
+        "declaration": true,
+        "declarationDir": "dist",
+        "esModuleInterop": true,
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitReturns": false,
+        "noImplicitThis": false,
+        "noImplicitAny": false,
+        "strictNullChecks": false,
+        "suppressImplicitAnyIndexErrors": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "allowSyntheticDefaultImports": true,
+        "types": [
+            "vitest/globals"
+        ]
+    },
+    "include": [
+        "src",
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
