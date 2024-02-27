@@ -1,16 +1,16 @@
 import { DesktopRunRequest } from "@runbotics/runbotics-sdk";
 
 export type RpaFrameworkActionRequest =
-    | DesktopRunRequest<'rpaframework.isWindowOpen', RpaFrameworkIsWindowOpenActionInput>
-    | DesktopRunRequest<'rpaframework.getElement', RpaFrameworkGetElementActionInput>
-    | DesktopRunRequest<'rpaframework.mouseClick', RpaFrameworkMouseClickActionInput>
-    | DesktopRunRequest<'rpaframework.waitForElement', RpaFrameworkWaitForElementActionInput>
-    | DesktopRunRequest<'rpaframework.pressKeys', RpaFrameworkPressKeysActionInput>
-    | DesktopRunRequest<'rpaframework.sendKeys', RpaFrameworkSendKeysActionInput>
-    | DesktopRunRequest<'rpaframework.minimizeWindow', RpaFrameworkMinimizeWindowActionInput>
-    | DesktopRunRequest<'rpaframework.maximizeWindow', RpaFrameworkMaximizeWindowActionInput>
-    | DesktopRunRequest<'rpaframework.closeWindow', RpaFrameworkCloseWindowActionInput>
-    | DesktopRunRequest<'rpaframework.getWindowElements'>;
+    | DesktopRunRequest<'rpaFramework.isWindowOpen', RpaFrameworkIsWindowOpenActionInput>
+    | DesktopRunRequest<'rpaFramework.getElement', RpaFrameworkGetElementActionInput>
+    | DesktopRunRequest<'rpaFramework.mouseClick', RpaFrameworkMouseClickActionInput>
+    | DesktopRunRequest<'rpaFramework.waitForElement', RpaFrameworkWaitForElementActionInput>
+    | DesktopRunRequest<'rpaFramework.pressKeys', RpaFrameworkPressKeysActionInput>
+    | DesktopRunRequest<'rpaFramework.sendKeys', RpaFrameworkSendKeysActionInput>
+    | DesktopRunRequest<'rpaFramework.minimizeWindow', RpaFrameworkMinimizeWindowActionInput>
+    | DesktopRunRequest<'rpaFramework.maximizeWindow', RpaFrameworkMaximizeWindowActionInput>
+    | DesktopRunRequest<'rpaFramework.closeWindow', RpaFrameworkCloseWindowActionInput>
+    | DesktopRunRequest<'rpaFramework.listWindows'>;
 
 export interface BaseActionInput {
     windowTitle: string;
@@ -44,7 +44,7 @@ export enum ExecutableArgs {
     WINDOW_TITLE = '-windowTitle',
     IS_WINDOW_OPEN = '-isWindowOpen',
     GET_ELEMENT = '-getElement',
-    GET_WINDOW_ELEMENTS = '-getWindowElements',
+    LIST_WINDOWS = '-listWindows',
     MOUSE_CLICK = '-mouseClick',
     WAIT_FOR_ELEMENT = '-waitForElement',
     PRESS_KEYS = '-pressKeys',

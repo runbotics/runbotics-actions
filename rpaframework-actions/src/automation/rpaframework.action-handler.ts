@@ -103,51 +103,51 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async getWindowElements() {
+    async listWindows() {
         return this.executableRunner([
-            ExecutableArgs.GET_WINDOW_ELEMENTS,
+            ExecutableArgs.LIST_WINDOWS,
         ]);
     }
 
     run(request: RpaFrameworkActionRequest) {
         if (![
-                'rpaframework.getWindowElements'
-            ].includes(request.script) &&
+            'rpaFramework.listWindows'
+        ].includes(request.script) &&
             !request.input.windowTitle
         ) {
             throw new Error(RpaFrameworkErrorMessage.windowTitleRequired());
         }
 
         if (![
-                'rpaframework.isWindowOpen',
-                'rpaframework.getWindowElements',
-                'rpaframework.pressKeys'
-            ].includes(request.script) &&
+            'rpaFramework.isWindowOpen',
+            'rpaFramework.listWindows',
+            'rpaFramework.pressKeys'
+        ].includes(request.script) &&
             !request.input.locator) {
             throw new Error(RpaFrameworkErrorMessage.locatorRequired());
         }
 
         switch (request.script) {
-            case 'rpaframework.isWindowOpen':
+            case 'rpaFramework.isWindowOpen':
                 return this.isWindowOpen(request.input)
-            case 'rpaframework.getElement':
+            case 'rpaFramework.getElement':
                 return this.getElement(request.input)
-            case 'rpaframework.mouseClick':
+            case 'rpaFramework.mouseClick':
                 return this.mouseClick(request.input)
-            case 'rpaframework.waitForElement':
+            case 'rpaFramework.waitForElement':
                 return this.waitForElement(request.input)
-            case 'rpaframework.pressKeys':
+            case 'rpaFramework.pressKeys':
                 return this.pressKeys(request.input)
-            case 'rpaframework.sendKeys':
+            case 'rpaFramework.sendKeys':
                 return this.sendKeys(request.input)
-            case 'rpaframework.minimizeWindow':
+            case 'rpaFramework.minimizeWindow':
                 return this.minimizeWindow(request.input)
-            case 'rpaframework.maximizeWindow':
+            case 'rpaFramework.maximizeWindow':
                 return this.maximizeWindow(request.input)
-            case 'rpaframework.closeWindow':
+            case 'rpaFramework.closeWindow':
                 return this.closeWindow(request.input)
-            case 'rpaframework.getWindowElements':
-                return this.getWindowElements()
+            case 'rpaFramework.listWindows':
+                return this.listWindows()
             default:
                 throw new Error('Action not found');
         }
@@ -155,6 +155,10 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
 
     private async executableRunner(args: string[]) {
         const executablePath = process.env.RUNBOTICS_RPAFRAMEWORK_EXE_DIR;
+        if (!executablePath) {
+            return Promise.reject(new Error('No executable path was provided.'));
+        }
+
         const child = spawn(executablePath, args);
 
         return new Promise((resolve, reject) => {

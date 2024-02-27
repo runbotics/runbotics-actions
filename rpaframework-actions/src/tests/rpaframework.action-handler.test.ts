@@ -1,6 +1,7 @@
 import { RpaFrameworkActionRequest } from 'automation/rpaframework.types';
 import RpaFrameworkActionHandler from '../automation/rpaframework.action-handler';
 import { RpaFrameworkErrorMessage } from '../automation/rpaframework.error-message';
+import { exec } from 'child_process';
 
 const defaultRequest = {
     processInstanceId: 'mock processInstanceId',
@@ -13,10 +14,21 @@ const defaultRequest = {
 };
 
 // must be absolute path to the .exe file
-process.env.RUNBOTICS_RPAFRAMEWORK_EXE_DIR = 'C:\\Users\\A029707\\Desktop\\projects\\runbotics-actions\\rpaframework-actions\\rpaframework-dist\\rpaframework-actions.exe';
+process.env.RUNBOTICS_RPAFRAMEWORK_EXE_DIR = '';
+
+const launchCalculator = () => {
+    exec('calc', (error) => {
+        if (error) {
+            console.error(`Error executing command: ${error}`);
+            return;
+        }
+        console.log(`Calculator opened successfully`);
+    });
+};
 
 describe('RpaFrameworkActionHandler', () => {
     let rpaFrameworkActionHandler: RpaFrameworkActionHandler;
+    launchCalculator();
 
     beforeEach(() => {
         rpaFrameworkActionHandler = new RpaFrameworkActionHandler();
@@ -30,7 +42,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should return a boolean whether the input window is open or not', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.isWindowOpen',
+                script: 'rpaFramework.isWindowOpen',
                 input: {
                     windowTitle: 'Kalkulator',
                 },
@@ -46,7 +58,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should return windows element by the provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.getElement',
+                script: 'rpaFramework.getElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
@@ -62,7 +74,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should throw if could not get element by provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.getElement',
+                script: 'rpaFramework.getElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'testLocator',
@@ -75,16 +87,16 @@ describe('RpaFrameworkActionHandler', () => {
                 await result();
                 expect(result).toThrow();
             } catch (error) {
-                console.log(error);
+                console.log('Successfully got error:', error);
             }
         });
     });
 
-    describe('getWindowElements', () => {
-        it('should return list of elements for provided window title', async () => {
+    describe('listWindows', () => {
+        it('should return list of currently running windows', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.getWindowElements',
+                script: 'rpaFramework.listWindows',
                 input: {},
             };
 
@@ -100,7 +112,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method mouseClick which clicks window element by provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.mouseClick',
+                script: 'rpaFramework.mouseClick',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:num5Button',
@@ -119,7 +131,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should wait for element by provided locator and return its properties', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.waitForElement',
+                script: 'rpaFramework.waitForElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
@@ -138,7 +150,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method pressKeys which performs keyboard provided shortcut', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.pressKeys',
+                script: 'rpaFramework.pressKeys',
                 input: {
                     windowTitle: 'Kalkulator',
                     keys: ['Ctrl', 'M'],
@@ -157,7 +169,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method sendKeys which passes provided keys to the element specified by locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.sendKeys',
+                script: 'rpaFramework.sendKeys',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
@@ -178,7 +190,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method minimizeWindow which minimizes window by provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.minimizeWindow',
+                script: 'rpaFramework.minimizeWindow',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'name:Kalkulator',
@@ -197,7 +209,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method maximizeWindow which maximizes window by provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.maximizeWindow',
+                script: 'rpaFramework.maximizeWindow',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'name:Kalkulator',
@@ -216,7 +228,7 @@ describe('RpaFrameworkActionHandler', () => {
         it('should call method closeWindow which closes window by provided locator', async () => {
             const request: RpaFrameworkActionRequest = {
                 ...defaultRequest,
-                script: 'rpaframework.closeWindow',
+                script: 'rpaFramework.closeWindow',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'name:Kalkulator',

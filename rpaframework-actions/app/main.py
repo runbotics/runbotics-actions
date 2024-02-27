@@ -13,8 +13,8 @@ def setup_args():
 
     group1 = parser.add_argument_group('Get Element')
     group1.add_argument('-getElement', '--getElementLocator', help='Gets an window element by provided locator')
-    group2 = parser.add_argument_group('Get Window Elements')
-    group2.add_argument('-getWindowElements', '--getWindowElements', nargs='?', const=True, help='Gets details of all currently running windows')
+    group2 = parser.add_argument_group('List Windows')
+    group2.add_argument('-listWindows', '--listWindows', nargs='?', const=True, help='Gets details of all currently running windows')
     group3 = parser.add_argument_group('Is Window Open')
     group3.add_argument('-isWindowOpen', '--isWindowOpen', nargs='?', const=True, help='Checks if provided window is open')
     group4 = parser.add_argument_group('Mouse Click')
@@ -37,14 +37,14 @@ def setup_args():
 def action_handler():
     args = setup_args()
 
-    if args.getWindowElements:
-        elements = actions.get_window_elements()
-        if not elements: raise ValueError(f"Cannot find window elements")
+    if args.listWindows:
+        windows = actions.list_windows()
+        if not windows: raise ValueError(f"Cannot find windows")
 
-        for element in elements:
-            element.pop('object')
+        for window in windows:
+            window.pop('object')
 
-        print(json.dumps(elements))
+        print(json.dumps(windows))
         return
 
     window_title = args.windowTitle

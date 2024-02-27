@@ -33,7 +33,7 @@ def connect_by_pid(app_pid: str, window_title: str = None):
 def get_element(locator: str):
     return win.get_element(locator)
 
-def get_window_elements():
+def list_windows():
     return win.list_windows()
 
 def mouse_click(
