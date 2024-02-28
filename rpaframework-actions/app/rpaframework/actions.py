@@ -71,6 +71,3 @@ def minimize_window(locator: str):
 
 def maximize_window(locator: str):
     return win.maximize_window(locator)
-
-def close_window(locator: str):
-    return win.close_window(locator)

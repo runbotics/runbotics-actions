@@ -9,7 +9,6 @@ export type RpaFrameworkActionRequest =
     | DesktopRunRequest<'rpaFramework.sendKeys', RpaFrameworkSendKeysActionInput>
     | DesktopRunRequest<'rpaFramework.minimizeWindow', RpaFrameworkMinimizeWindowActionInput>
     | DesktopRunRequest<'rpaFramework.maximizeWindow', RpaFrameworkMaximizeWindowActionInput>
-    | DesktopRunRequest<'rpaFramework.closeWindow', RpaFrameworkCloseWindowActionInput>
     | DesktopRunRequest<'rpaFramework.listWindows'>;
 
 export interface BaseActionInput {
@@ -37,8 +36,6 @@ export interface RpaFrameworkSendKeysActionInput extends BaseActionInput {
 export interface RpaFrameworkMinimizeWindowActionInput extends BaseActionInput {}
 
 export interface RpaFrameworkMaximizeWindowActionInput extends BaseActionInput {}
-
-export interface RpaFrameworkCloseWindowActionInput extends BaseActionInput {}
 
 export enum ExecutableArgs {
     WINDOW_TITLE = '-windowTitle',

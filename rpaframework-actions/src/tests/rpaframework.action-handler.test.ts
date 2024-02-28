@@ -223,23 +223,4 @@ describe('RpaFrameworkActionHandler', () => {
             expect(rpaFrameworkActionHandler.maximizeWindow).toBeCalled();
         });
     });
-
-    describe('closeWindow', () => {
-        it('should call method closeWindow which closes window by provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
-                ...defaultRequest,
-                script: 'rpaFramework.closeWindow',
-                input: {
-                    windowTitle: 'Kalkulator',
-                    locator: 'name:Kalkulator',
-                },
-            };
-
-            vi.spyOn(rpaFrameworkActionHandler, 'closeWindow');
-
-            await rpaFrameworkActionHandler.run(request);
-
-            expect(rpaFrameworkActionHandler.closeWindow).toBeCalled();
-        });
-    });
 });

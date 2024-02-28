@@ -4,7 +4,18 @@ import {
 
 import { spawn } from 'child_process';
 import { isValidJson } from "./rpaframework.utils";
-import { ExecutableArgs, RpaFrameworkActionRequest, RpaFrameworkCloseWindowActionInput, RpaFrameworkGetElementActionInput, RpaFrameworkIsWindowOpenActionInput, RpaFrameworkMaximizeWindowActionInput, RpaFrameworkMinimizeWindowActionInput, RpaFrameworkMouseClickActionInput, RpaFrameworkPressKeysActionInput, RpaFrameworkSendKeysActionInput, RpaFrameworkWaitForElementActionInput } from "./rpaframework.types";
+import {
+    ExecutableArgs,
+    RpaFrameworkActionRequest,
+    RpaFrameworkGetElementActionInput,
+    RpaFrameworkIsWindowOpenActionInput,
+    RpaFrameworkMaximizeWindowActionInput,
+    RpaFrameworkMinimizeWindowActionInput,
+    RpaFrameworkMouseClickActionInput,
+    RpaFrameworkPressKeysActionInput,
+    RpaFrameworkSendKeysActionInput,
+    RpaFrameworkWaitForElementActionInput
+} from "./rpaframework.types";
 import { RpaFrameworkErrorMessage } from "./rpaframework.error-message";
 
 export default class RpaFrameworkActionHandler extends StatelessActionHandler {
@@ -94,15 +105,6 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async closeWindow(input: RpaFrameworkCloseWindowActionInput) {
-        return this.executableRunner([
-            ExecutableArgs.WINDOW_TITLE,
-            input.windowTitle,
-            ExecutableArgs.CLOSE_WINDOW,
-            input.locator,
-        ]);
-    }
-
     async listWindows() {
         return this.executableRunner([
             ExecutableArgs.LIST_WINDOWS,
@@ -144,8 +146,6 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
                 return this.minimizeWindow(request.input)
             case 'rpaFramework.maximizeWindow':
                 return this.maximizeWindow(request.input)
-            case 'rpaFramework.closeWindow':
-                return this.closeWindow(request.input)
             case 'rpaFramework.listWindows':
                 return this.listWindows()
             default:

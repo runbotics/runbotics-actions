@@ -29,8 +29,6 @@ def setup_args():
     group8.add_argument('-minimizeWindow', '--minimizeWindowLocator', help='Minimize window by provided locator')
     group9 = parser.add_argument_group('Maximize Window')
     group9.add_argument('-maximizeWindow', '--maximizeWindowLocator', help='Maximize window by provided locator')
-    group10 = parser.add_argument_group('Close Window')
-    group10.add_argument('-closeWindow', '--closeWindowLocator', help='Close window by provided locator')
 
     return parser.parse_args()
 
@@ -116,11 +114,6 @@ def action_handler():
         locator = args.maximizeWindowLocator
 
         actions.maximize_window(locator)
-
-    if args.closeWindowLocator:
-        locator = args.closeWindowLocator
-
-        actions.close_window(locator)
 
 if __name__ == '__main__':
     action_handler()
