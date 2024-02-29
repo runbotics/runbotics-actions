@@ -1,6 +1,6 @@
-import { RpaFrameworkActionRequest } from 'automation/rpaframework.types';
-import RpaFrameworkActionHandler from '../automation/rpaframework.action-handler';
-import { RpaFrameworkErrorMessage } from '../automation/rpaframework.error-message';
+import { WindowsActionRequest } from 'automation/windows.types';
+import WindowsActionHandler from '../automation/windows.action-handler';
+import { WindowsErrorMessage } from '../automation/windows.error-message';
 import { exec } from 'child_process';
 
 const defaultRequest = {
@@ -26,29 +26,29 @@ const launchCalculator = () => {
     });
 };
 
-describe('RpaFrameworkActionHandler', () => {
-    let rpaFrameworkActionHandler: RpaFrameworkActionHandler;
+describe('WindowsActionHandler', () => {
+    let windowsActionHandler: WindowsActionHandler;
     launchCalculator();
 
     beforeEach(() => {
-        rpaFrameworkActionHandler = new RpaFrameworkActionHandler();
+        windowsActionHandler = new WindowsActionHandler();
     });
 
     it('should be defined', () => {
-        expect(rpaFrameworkActionHandler).toBeDefined();
+        expect(windowsActionHandler).toBeDefined();
     });
 
     describe('isWindowOpen', () => {
         it('should return a boolean whether the input window is open or not', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.isWindowOpen',
+                script: 'windows.isWindowOpen',
                 input: {
                     windowTitle: 'Kalkulator',
                 },
             };
 
-            const result = await rpaFrameworkActionHandler.run(request);
+            const result = await windowsActionHandler.run(request);
 
             expect(typeof result).toBe('boolean');
         });
@@ -56,32 +56,32 @@ describe('RpaFrameworkActionHandler', () => {
 
     describe('getElement', () => {
         it('should return windows element by the provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.getElement',
+                script: 'windows.getElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
                 },
             };
 
-            const result = await rpaFrameworkActionHandler.run(request);
+            const result = await windowsActionHandler.run(request);
 
             expect(result).toBeDefined();
             expect(typeof result).toBe('object');
         });
 
         it('should throw if could not get element by provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.getElement',
+                script: 'windows.getElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'testLocator',
                 },
             };
 
-            const result = () => rpaFrameworkActionHandler.run(request);
+            const result = () => windowsActionHandler.run(request);
 
             try {
                 await result();
@@ -94,13 +94,13 @@ describe('RpaFrameworkActionHandler', () => {
 
     describe('listWindows', () => {
         it('should return list of currently running windows', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.listWindows',
+                script: 'windows.listWindows',
                 input: {},
             };
 
-            const result = await rpaFrameworkActionHandler.run(request);
+            const result = await windowsActionHandler.run(request);
 
             expect(result).toBeDefined();
             expect(Array.isArray(result)).toBeTruthy();
@@ -110,35 +110,35 @@ describe('RpaFrameworkActionHandler', () => {
 
     describe('mouseClick', () => {
         it('should call method mouseClick which clicks window element by provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.mouseClick',
+                script: 'windows.mouseClick',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:num5Button',
                 },
             };
 
-            vi.spyOn(rpaFrameworkActionHandler, 'mouseClick');
+            vi.spyOn(windowsActionHandler, 'mouseClick');
 
-            await rpaFrameworkActionHandler.run(request);
+            await windowsActionHandler.run(request);
 
-            expect(rpaFrameworkActionHandler.mouseClick).toBeCalled();
+            expect(windowsActionHandler.mouseClick).toBeCalled();
         });
     });
 
     describe('waitForElement', () => {
         it('should wait for element by provided locator and return its properties', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.waitForElement',
+                script: 'windows.waitForElement',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
                 },
             };
 
-            const result = await rpaFrameworkActionHandler.run(request);
+            const result = await windowsActionHandler.run(request);
 
             expect(result).toBeDefined();
             expect(Array.isArray(result)).toBeTruthy();
@@ -148,28 +148,28 @@ describe('RpaFrameworkActionHandler', () => {
 
     describe('pressKeys', () => {
         it('should call method pressKeys which performs keyboard provided shortcut', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.pressKeys',
+                script: 'windows.pressKeys',
                 input: {
                     windowTitle: 'Kalkulator',
                     keys: ['Ctrl', 'M'],
                 },
             };
 
-            vi.spyOn(rpaFrameworkActionHandler, 'pressKeys');
+            vi.spyOn(windowsActionHandler, 'pressKeys');
 
-            await rpaFrameworkActionHandler.run(request);
+            await windowsActionHandler.run(request);
 
-            expect(rpaFrameworkActionHandler.pressKeys).toBeCalled();
+            expect(windowsActionHandler.pressKeys).toBeCalled();
         });
     });
 
     describe('sendKeys', () => {
         it('should call method sendKeys which passes provided keys to the element specified by locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.sendKeys',
+                script: 'windows.sendKeys',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'id:CalculatorResults',
@@ -178,49 +178,49 @@ describe('RpaFrameworkActionHandler', () => {
                 },
             };
 
-            vi.spyOn(rpaFrameworkActionHandler, 'sendKeys');
+            vi.spyOn(windowsActionHandler, 'sendKeys');
 
-            await rpaFrameworkActionHandler.run(request);
+            await windowsActionHandler.run(request);
 
-            expect(rpaFrameworkActionHandler.sendKeys).toBeCalled();
+            expect(windowsActionHandler.sendKeys).toBeCalled();
         });
     });
 
     describe('minimizeWindow', () => {
         it('should call method minimizeWindow which minimizes window by provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.minimizeWindow',
+                script: 'windows.minimizeWindow',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'name:Kalkulator',
                 },
             };
 
-            vi.spyOn(rpaFrameworkActionHandler, 'minimizeWindow');
+            vi.spyOn(windowsActionHandler, 'minimizeWindow');
 
-            await rpaFrameworkActionHandler.run(request);
+            await windowsActionHandler.run(request);
 
-            expect(rpaFrameworkActionHandler.minimizeWindow).toBeCalled();
+            expect(windowsActionHandler.minimizeWindow).toBeCalled();
         });
     });
 
     describe('maximizeWindow', () => {
         it('should call method maximizeWindow which maximizes window by provided locator', async () => {
-            const request: RpaFrameworkActionRequest = {
+            const request: WindowsActionRequest = {
                 ...defaultRequest,
-                script: 'rpaFramework.maximizeWindow',
+                script: 'windows.maximizeWindow',
                 input: {
                     windowTitle: 'Kalkulator',
                     locator: 'name:Kalkulator',
                 },
             };
 
-            vi.spyOn(rpaFrameworkActionHandler, 'maximizeWindow');
+            vi.spyOn(windowsActionHandler, 'maximizeWindow');
 
-            await rpaFrameworkActionHandler.run(request);
+            await windowsActionHandler.run(request);
 
-            expect(rpaFrameworkActionHandler.maximizeWindow).toBeCalled();
+            expect(windowsActionHandler.maximizeWindow).toBeCalled();
         });
     });
 });

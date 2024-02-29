@@ -8,7 +8,7 @@ __pycache__/
 build/
 develop-eggs/
 dist/
-rpaframework-dist/
+windows-dist/
 downloads/
 eggs/
 .eggs/

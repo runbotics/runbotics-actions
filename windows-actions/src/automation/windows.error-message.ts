@@ -1,4 +1,4 @@
-export class RpaFrameworkErrorMessage {
+export class WindowsErrorMessage {
     static windowTitleRequired() {
         return 'This action requires window title parameter. It has to be case identical.';
     }

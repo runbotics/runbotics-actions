@@ -1,6 +1,6 @@
 import argparse
 import json
-import rpaframework.actions as actions
+import windows.actions as actions
 import sys
 
 sys.stdin.reconfigure(encoding='utf-8')

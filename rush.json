@@ -369,8 +369,8 @@
             "projectFolder": "sap-actions"
         },
         {
-            "packageName": "rpaframework-actions",
-            "projectFolder": "rpaframework-actions"
+            "packageName": "windows-actions",
+            "projectFolder": "windows-actions"
         }
         // {
         //   /**

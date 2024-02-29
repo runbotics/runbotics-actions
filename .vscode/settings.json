@@ -2,6 +2,6 @@
     "conventionalCommits.scopes": [
         "office",
         "sap",
-        "rpaframework"
+        "windows"
     ]
 }

@@ -3,24 +3,24 @@ import {
 } from "@runbotics/runbotics-sdk";
 
 import { spawn } from 'child_process';
-import { isValidJson } from "./rpaframework.utils";
+import { isValidJson } from "./windows.utils";
 import {
     ExecutableArgs,
-    RpaFrameworkActionRequest,
-    RpaFrameworkGetElementActionInput,
-    RpaFrameworkIsWindowOpenActionInput,
-    RpaFrameworkMaximizeWindowActionInput,
-    RpaFrameworkMinimizeWindowActionInput,
-    RpaFrameworkMouseClickActionInput,
-    RpaFrameworkPressKeysActionInput,
-    RpaFrameworkSendKeysActionInput,
-    RpaFrameworkWaitForElementActionInput
-} from "./rpaframework.types";
-import { RpaFrameworkErrorMessage } from "./rpaframework.error-message";
+    WindowsActionRequest,
+    WindowsGetElementActionInput,
+    WindowsIsWindowOpenActionInput,
+    WindowsMaximizeWindowActionInput,
+    WindowsMinimizeWindowActionInput,
+    WindowsMouseClickActionInput,
+    WindowsPressKeysActionInput,
+    WindowsSendKeysActionInput,
+    WindowsWaitForElementActionInput
+} from "./windows.types";
+import { WindowsErrorMessage } from "./windows.error-message";
 
-export default class RpaFrameworkActionHandler extends StatelessActionHandler {
+export default class WindowsActionHandler extends StatelessActionHandler {
 
-    async isWindowOpen(input: RpaFrameworkIsWindowOpenActionInput) {
+    async isWindowOpen(input: WindowsIsWindowOpenActionInput) {
         return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -28,7 +28,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async getElement(input: RpaFrameworkGetElementActionInput) {
+    async getElement(input: WindowsGetElementActionInput) {
         return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -37,7 +37,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async mouseClick(input: RpaFrameworkMouseClickActionInput) {
+    async mouseClick(input: WindowsMouseClickActionInput) {
         this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -46,7 +46,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async waitForElement(input: RpaFrameworkWaitForElementActionInput) {
+    async waitForElement(input: WindowsWaitForElementActionInput) {
         return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -55,9 +55,9 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async pressKeys(input: RpaFrameworkPressKeysActionInput) {
+    async pressKeys(input: WindowsPressKeysActionInput) {
         if (!input.keys || !Array.isArray(input.keys)) {
-            throw new Error(RpaFrameworkErrorMessage.keysRequired());
+            throw new Error(WindowsErrorMessage.keysRequired());
         }
 
         this.executeAction([
@@ -68,9 +68,9 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async sendKeys(input: RpaFrameworkSendKeysActionInput) {
+    async sendKeys(input: WindowsSendKeysActionInput) {
         if (input?.keys && typeof input.keys !== 'string') {
-            throw new Error(RpaFrameworkErrorMessage.invalidKeysType());
+            throw new Error(WindowsErrorMessage.invalidKeysType());
         }
 
         const payload = {
@@ -87,7 +87,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async minimizeWindow(input: RpaFrameworkMinimizeWindowActionInput) {
+    async minimizeWindow(input: WindowsMinimizeWindowActionInput) {
         return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -96,7 +96,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    async maximizeWindow(input: RpaFrameworkMaximizeWindowActionInput) {
+    async maximizeWindow(input: WindowsMaximizeWindowActionInput) {
         return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
@@ -111,42 +111,42 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         ]);
     }
 
-    run(request: RpaFrameworkActionRequest) {
+    run(request: WindowsActionRequest) {
         if (![
-            'rpaFramework.listWindows'
+            'windows.listWindows'
         ].includes(request.script) &&
             !request.input.windowTitle
         ) {
-            throw new Error(RpaFrameworkErrorMessage.windowTitleRequired());
+            throw new Error(WindowsErrorMessage.windowTitleRequired());
         }
 
         if (![
-            'rpaFramework.isWindowOpen',
-            'rpaFramework.listWindows',
-            'rpaFramework.pressKeys'
+            'windows.isWindowOpen',
+            'windows.listWindows',
+            'windows.pressKeys'
         ].includes(request.script) &&
             !request.input.locator) {
-            throw new Error(RpaFrameworkErrorMessage.locatorRequired());
+            throw new Error(WindowsErrorMessage.locatorRequired());
         }
 
         switch (request.script) {
-            case 'rpaFramework.isWindowOpen':
+            case 'windows.isWindowOpen':
                 return this.isWindowOpen(request.input)
-            case 'rpaFramework.getElement':
+            case 'windows.getElement':
                 return this.getElement(request.input)
-            case 'rpaFramework.mouseClick':
+            case 'windows.mouseClick':
                 return this.mouseClick(request.input)
-            case 'rpaFramework.waitForElement':
+            case 'windows.waitForElement':
                 return this.waitForElement(request.input)
-            case 'rpaFramework.pressKeys':
+            case 'windows.pressKeys':
                 return this.pressKeys(request.input)
-            case 'rpaFramework.sendKeys':
+            case 'windows.sendKeys':
                 return this.sendKeys(request.input)
-            case 'rpaFramework.minimizeWindow':
+            case 'windows.minimizeWindow':
                 return this.minimizeWindow(request.input)
-            case 'rpaFramework.maximizeWindow':
+            case 'windows.maximizeWindow':
                 return this.maximizeWindow(request.input)
-            case 'rpaFramework.listWindows':
+            case 'windows.listWindows':
                 return this.listWindows()
             default:
                 throw new Error('Action not found');
