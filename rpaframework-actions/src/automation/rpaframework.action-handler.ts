@@ -21,7 +21,7 @@ import { RpaFrameworkErrorMessage } from "./rpaframework.error-message";
 export default class RpaFrameworkActionHandler extends StatelessActionHandler {
 
     async isWindowOpen(input: RpaFrameworkIsWindowOpenActionInput) {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.IS_WINDOW_OPEN,
@@ -29,7 +29,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async getElement(input: RpaFrameworkGetElementActionInput) {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.GET_ELEMENT,
@@ -38,7 +38,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async mouseClick(input: RpaFrameworkMouseClickActionInput) {
-        this.executableRunner([
+        this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.MOUSE_CLICK,
@@ -47,7 +47,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async waitForElement(input: RpaFrameworkWaitForElementActionInput) {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.WAIT_FOR_ELEMENT,
@@ -60,7 +60,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
             throw new Error(RpaFrameworkErrorMessage.keysRequired());
         }
 
-        this.executableRunner([
+        this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.PRESS_KEYS,
@@ -79,7 +79,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
             send_enter: input?.sendEnter,
         };
 
-        this.executableRunner([
+        this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.SEND_KEYS,
@@ -88,7 +88,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async minimizeWindow(input: RpaFrameworkMinimizeWindowActionInput) {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.MINIMIZE_WINDOW,
@@ -97,7 +97,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async maximizeWindow(input: RpaFrameworkMaximizeWindowActionInput) {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.WINDOW_TITLE,
             input.windowTitle,
             ExecutableArgs.MAXIMIZE_WINDOW,
@@ -106,7 +106,7 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
     }
 
     async listWindows() {
-        return this.executableRunner([
+        return this.executeAction([
             ExecutableArgs.LIST_WINDOWS,
         ]);
     }
@@ -153,8 +153,8 @@ export default class RpaFrameworkActionHandler extends StatelessActionHandler {
         }
     }
 
-    private async executableRunner(args: string[]) {
-        const executablePath = process.env.RUNBOTICS_RPAFRAMEWORK_EXE_DIR;
+    private async executeAction(args: string[]) {
+        const executablePath = process.env.RUNBOTICS_EXECUTABLE_PATH;
         if (!executablePath) {
             return Promise.reject(new Error('No executable path was provided.'));
         }

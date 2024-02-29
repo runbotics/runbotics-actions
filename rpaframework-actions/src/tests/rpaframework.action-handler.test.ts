@@ -14,7 +14,7 @@ const defaultRequest = {
 };
 
 // must be absolute path to the .exe file
-process.env.RUNBOTICS_RPAFRAMEWORK_EXE_DIR = '';
+process.env.RUNBOTICS_EXECUTABLE_PATH = '';
 
 const launchCalculator = () => {
     exec('calc', (error) => {
