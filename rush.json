@@ -367,6 +367,10 @@
         {
             "packageName": "sap-actions",
             "projectFolder": "sap-actions"
+        },
+        {
+            "packageName": "windows-actions",
+            "projectFolder": "windows-actions"
         }
         // {
         //   /**
