@@ -24,9 +24,6 @@ jobs:
   prepare-tag-input:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    outputs:
-      package: ${{ steps.split.outputs._1 }}
-      version: ${{ steps.split.outputs._2 }}
     steps:
       - name: Split tag name
         id: split
@@ -43,9 +40,6 @@ jobs:
   prepare-workflow-dispatch-input:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
-    outputs:
-      package: ${{ inputs.package }}
-      version: ${{ info.version }}
     defaults:
       run:
         working-directory: ./${{ inputs.package }}
