@@ -24,6 +24,9 @@ jobs:
   prepare-tag-input:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
+    outputs:
+      package: steps.split.outputs._1
+      version: steps.split.outputs._2
     steps:
       - name: Split tag name
         id: split
@@ -32,14 +35,13 @@ jobs:
           msg: ${{ github.ref_name }}
           separator: _
           maxsplit: 1
-      - name: Set envs
-        run: |
-            echo "PACKAGE=${{ steps.split.outputs._1 }}" >> $GITHUB_ENV
-            echo "VERSION=${{ steps.split.outputs._2 }}" >> $GITHUB_ENV
   
   prepare-workflow-dispatch-input:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
+    outputs:
+      package: inputs.package
+      version: steps.package.version
     defaults:
       run:
         working-directory: ./${{ inputs.package }}
@@ -47,18 +49,16 @@ jobs:
       - name: Read & Modify of package.json
         uses: jaywcjlove/github-action-package@v2.0.0
         id: package
-      - name: Set envs
-        run: |
-          echo "PACKAGE=${{ inputs.package }}" >> $GITHUB_ENV
-          echo "VERSION=${{ steps.package.version }}" >> $GITHUB_ENV
-
 
   build-actions-package:
     runs-on: windows-latest
     needs: [prepare-workflow-dispatch-input, prepare-tag-input]
     defaults:
       run:
-        working-directory: ./${{ env.PACKAGE }}
+        working-directory: ./${{ env.package }}
+    env:
+      package: needs.prepare-tag-input.outputs.package || needs.prepare-workflow-dispatch-input.outputs.package
+      version: needs.prepare-tag-input.outputs.version || needs.prepare-workflow-dispatch-input.outputs.version
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -78,7 +78,7 @@ jobs:
         id: upload-bot-executable-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: ${{ env.PACKAGE }}-${{ env.VERSION }}
+          name: ${{ env.package }}-${{ env.version }}
           path: |
             dist/
             node_modules/
