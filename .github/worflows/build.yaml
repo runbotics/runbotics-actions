@@ -1,0 +1,92 @@
+name: Build actions package
+
+on:
+  push:
+    tags:
+      - office-actions_**
+      - sap-actions_**
+      - windows-actions_**
+  workflow_dispatch:
+    inputs:
+      package:
+        description: 'Which package should be built?'
+        required: true
+        type: choice
+        options:
+          - office-actions
+          - sap-actions
+          - windows-actions
+
+env:
+  NODE_VERSION: 18.x
+
+jobs:
+  prepare-tag-input:
+    if: ${{ github.event_name == 'push' }}
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ steps.split.outputs._1 }}
+      version: ${{ steps.split.outputs._2 }}
+    steps:
+      - name: Split tag name
+        id: split
+        uses: winterjung/split@v2.1.0
+        with:
+          msg: 
+          separator: _
+          maxsplit: 1
+      - name:
+        run: |
+            echo "PACKAGE=${{ steps.split.outputs._1 }}" >> $GITHUB_ENV
+            echo "VERSION=${{ steps.split.outputs._2 }}" >> $GITHUB_ENV
+  
+  prepare-workflow-dispatch-input:
+    if: ${{ github.event_name == 'workflow_dispatch' }}
+    runs-on: ubuntu-latest
+    outputs:
+      package: ${{ inputs.package }}
+      version: ${{ info.version }}
+    defaults:
+      run:
+        working-directory: ./${{ inputs.package }}
+    steps:
+      - name: Read & Modify of package.json
+        uses: jaywcjlove/github-action-package@v2.0.0
+        id: info
+      - name: Set envs
+        run: |
+          echo "PACKAGE=${{ inputs.package }}" >> $GITHUB_ENV
+          echo "VERSION=${{ info.version }}" >> $GITHUB_ENV
+
+
+  build-actions-package:
+    runs-on: windows-latest
+    needs: [prepare-workflow-dispatch-input, prepare-tag-input]
+    defaults:
+      run:
+        working-directory: ./${{ env.PACKAGE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        id: upload-bot-executable-artifact
+        uses: actions/upload-artifact@v4.0.0
+        with:
+          name: ${{ env.PACKAGE }}-${{ env.VERSION }}
+          path: |
+            dist/
+            node_modules/
+            package.json
+          if-no-files-found: error
