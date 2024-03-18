@@ -42,13 +42,12 @@ jobs:
     outputs:
       package: github.event.inputs.package
       version: steps.package.version
-    defaults:
-      run:
-        working-directory: ./${{ github.event.inputs.package }}
     steps:
       - name: Read & Modify of package.json
         uses: jaywcjlove/github-action-package@v2.0.0
         id: package
+        with:
+          path: ./${{ github.event.inputs.package }}/package.json
 
   build-actions-package:
     runs-on: windows-latest
