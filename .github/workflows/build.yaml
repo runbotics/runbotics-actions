@@ -46,11 +46,11 @@ jobs:
     steps:
       - name: Read & Modify of package.json
         uses: jaywcjlove/github-action-package@v2.0.0
-        id: info
+        id: package
       - name: Set envs
         run: |
           echo "PACKAGE=${{ inputs.package }}" >> $GITHUB_ENV
-          echo "VERSION=${{ info.version }}" >> $GITHUB_ENV
+          echo "VERSION=${{ steps.package.version }}" >> $GITHUB_ENV
 
 
   build-actions-package:
