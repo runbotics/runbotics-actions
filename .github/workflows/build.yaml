@@ -47,7 +47,7 @@ jobs:
         uses: jaywcjlove/github-action-package@v2.0.0
         id: package
         with:
-          path: ${{ github.event.inputs.package }}/package.json
+          path: ../${{ github.event.inputs.package }}/package.json
 
   build-actions-package:
     runs-on: windows-latest
