@@ -40,11 +40,11 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     outputs:
-      package: inputs.package
+      package: github.event.inputs.package
       version: steps.package.version
     defaults:
       run:
-        working-directory: ./${{ inputs.package }}
+        working-directory: ./${{ github.event.inputs.package }}
     steps:
       - name: Read & Modify of package.json
         uses: jaywcjlove/github-action-package@v2.0.0
