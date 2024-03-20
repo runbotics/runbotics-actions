@@ -87,7 +87,7 @@ jobs:
         with:
           name: ${{ env.package }}-${{ env.version }}
           path: |
-            dist
-            node_modules
-            package.json
+            ${{ env.package }}/dist/
+            ${{ env.package }}/node_modules/
+            ${{ env.package }}/package.json
           if-no-files-found: error
