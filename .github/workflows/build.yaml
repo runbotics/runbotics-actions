@@ -84,7 +84,7 @@ jobs:
       - name: Zip files
         uses: vimtor/action-zip@v1
         with:
-          files: ${{ env.package }}/dist/ ${{ env.package }}/node_modules/ ${{ env.package }}/package.json
+          files: ${{ env.package }}/dist ${{ env.package }}/node_modules ${{ env.package }}/package.json
           dest: ${{ env.package }}_${{ env.version }}.zip
 
       - name: Upload artifact
