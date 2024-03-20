@@ -86,6 +86,7 @@ jobs:
         with:
           files: ${{ env.package }}/dist ${{ env.package }}/node_modules ${{ env.package }}/package.json
           dest: ${{ env.package }}_${{ env.version }}.zip
+          recursive: false
 
       - name: Upload artifact
         id: upload-artifact
