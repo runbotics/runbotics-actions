@@ -53,6 +53,7 @@ jobs:
 
   build-actions-package:
     runs-on: windows-latest
+    if: ${{ always() }}
     needs: [prepare-workflow-dispatch-input, prepare-tag-input]
     defaults:
       run:
