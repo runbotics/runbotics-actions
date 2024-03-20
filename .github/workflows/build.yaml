@@ -72,7 +72,7 @@ jobs:
       
       - name: Create .npmrc
         run: |
-          "\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" | Out-File -FilePath .\.npmrc
+          "\n@runbotics:registry = https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" | Out-File -FilePath .\.npmrc
 
       - name: Install dependencies
         run: npm install
