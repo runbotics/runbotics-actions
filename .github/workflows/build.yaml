@@ -82,23 +82,20 @@ jobs:
         run: npm run build
 
       - name: Zip files
-        uses: vimtor/action-zip@v1
-        with:
-          files: ${{ env.package }}/dist ${{ env.package }}/node_modules ${{ env.package }}/package.json
-          dest: ${{ env.package }}_${{ env.version }}.zip
-          recursive: false
+        shell: bash
+        run: zip -r ${{ env.package }}_${{ env.version }}.zip dist node_modules package.json
 
       - name: Upload artifact
         id: upload-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
           name: ${{ env.package }}_${{ env.version }}
-          path: ${{ env.package }}_${{ env.version }}.zip
+          path: ${{ env.package }}/${{ env.package }}_${{ env.version }}.zip
           if-no-files-found: error
 
       - name: Create release
         uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
-          files: ${{ env.package }}_${{ env.version }}.zip
+          files: ${{ env.package }}/${{ env.package }}_${{ env.version }}.zip
           name: "${{ env.package }} ${{ env.version }}"
