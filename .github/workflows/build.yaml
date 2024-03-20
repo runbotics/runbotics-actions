@@ -75,9 +75,6 @@ jobs:
         run: |
           echo -en "\n@runbotics:registry = https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
 
-      - name: .npmrc lookup
-        run: gc .npmrc
-
       - name: Install dependencies
         run: npm install
 
@@ -90,7 +87,7 @@ jobs:
         with:
           name: ${{ env.package }}-${{ env.version }}
           path: |
-            dist/
-            node_modules/
+            dist
+            node_modules
             package.json
           if-no-files-found: error
