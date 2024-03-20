@@ -57,10 +57,10 @@ jobs:
     needs: [prepare-workflow-dispatch-input, prepare-tag-input]
     defaults:
       run:
-        working-directory: ./${{ env.package }}
+        working-directory: ${{ env.package }}
     env:
-      package: needs.prepare-tag-input.outputs.package || needs.prepare-workflow-dispatch-input.outputs.package
-      version: needs.prepare-tag-input.outputs.version || needs.prepare-workflow-dispatch-input.outputs.version
+      package: ${{ needs.prepare-tag-input.outputs.package }} || ${{ needs.prepare-workflow-dispatch-input.outputs.package }}
+      version: ${{ needs.prepare-tag-input.outputs.version }} || ${{ needs.prepare-workflow-dispatch-input.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
