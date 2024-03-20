@@ -25,8 +25,8 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     runs-on: ubuntu-latest
     outputs:
-      package: ${{ steps.split.outputs._1 }}
-      version: ${{ steps.split.outputs._2 }}
+      package: ${{ steps.split.outputs._0 }}
+      version: ${{ steps.split.outputs._1 }}
     steps:
       - name: Split tag name
         id: split
