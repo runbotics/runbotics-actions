@@ -82,8 +82,7 @@ jobs:
         run: npm run build
 
       - name: Zip files
-        shell: bash
-        run: zip -r ${{ env.package }}_${{ env.version }}.zip dist node_modules package.json
+        run: Compress-Archive -Path "dist", "node_modules", "package.json" -DestinationPath "${{ env.package }}_${{ env.version }}.zip"
 
       - name: Upload artifact
         id: upload-artifact
