@@ -69,6 +69,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Create .npmrc
+        run: |
+          "\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" | Out-File -FilePath .\.npmrc
 
       - name: Install dependencies
         run: npm install
