@@ -101,7 +101,8 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
-          files: ${{ steps.download-artifact.outputs.download-path }}
+          files: |
+            ${{ env.package }}/dist/
+            ${{ env.package }}/node_modules/
+            ${{ env.package }}/package.json
           name: "${{ env.package }} ${{ env.version }}"
-          body: ""
-            
