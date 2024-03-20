@@ -96,6 +96,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
-          files: ${{ env.package }}_${{ env.version }}.zip
+          files: ${{ steps.upload-bot-executable-artifact.outputs.artifact-url }}
           name: "${{ env.package }} ${{ env.version }}"
+          body: ""
             
