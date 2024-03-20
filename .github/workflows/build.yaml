@@ -72,7 +72,10 @@ jobs:
       
       - name: Create .npmrc
         run: |
-          "\n@runbotics:registry = https://npm.pkg.github.com\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" | Out-File -FilePath .\.npmrc
+          "\r\n@runbotics:registry = https://npm.pkg.github.com\r\n//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" | Out-File -FilePath .\.npmrc
+
+      - name: .npmrc lookup
+        run: gc .npmrc
 
       - name: .npmrc lookup
         run: gc .npmrc
