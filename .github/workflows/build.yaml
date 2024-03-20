@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       package: ${{ github.event.inputs.package }}
-      version: ${{ steps.package.version }}
+      version: ${{ steps.package.outputs.version }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -85,9 +85,17 @@ jobs:
         id: upload-bot-executable-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
-          name: ${{ env.package }}-${{ env.version }}
+          name: ${{ env.package }}_${{ env.version }}
           path: |
             ${{ env.package }}/dist/
             ${{ env.package }}/node_modules/
             ${{ env.package }}/package.json
           if-no-files-found: error
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.event_name == 'push' }}
+        with:
+          files: ${{ env.package }}_${{ env.version }}.zip
+          name: "${{ env.package }} ${{ env.version }}"
+            
