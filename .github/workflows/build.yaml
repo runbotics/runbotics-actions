@@ -82,7 +82,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifact
-        id: upload-bot-executable-artifact
+        id: upload-artifact
         uses: actions/upload-artifact@v4.0.0
         with:
           name: ${{ env.package }}_${{ env.version }}
@@ -92,11 +92,16 @@ jobs:
             ${{ env.package }}/package.json
           if-no-files-found: error
 
+      - name: Download artifact
+        id: download-artifact
+        if: ${{ github.event_name == 'push' }}
+        uses: actions/download-artifact@v4
+
       - name: Create release
         uses: softprops/action-gh-release@v2
         if: ${{ github.event_name == 'push' }}
         with:
-          files: ${{ steps.upload-bot-executable-artifact.outputs.artifact-url }}
+          files: ${{ steps.download-artifact.outputs.download-path }}
           name: "${{ env.package }} ${{ env.version }}"
           body: ""
             
