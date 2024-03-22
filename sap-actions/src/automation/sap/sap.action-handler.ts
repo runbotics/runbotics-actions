@@ -233,6 +233,21 @@ export default class SapActionHandler extends StatefulActionHandler {
         return {};
     }
 
+   /**
+     *  @name SAP: Toggle checkbox
+     *  @description Changes checkbox tick state to opposite.
+     *  @param target - ID of SAP user interface element
+     *  @param checked - boolean value of checkbox selection
+     *  @example target: 'wnd[0]/example/target/path'
+     *  @example checked: true
+     */
+    async toggleCheckbox(
+        input: SapTypes.SAPToggleCheckboxActionInput
+    ) {
+        this.isApplicationOpen();
+        this.session.FindById(input.target).selected = input.checked;
+    }
+
     selectTableRow(input: SapTypes.SAPSelectTableRowActionInput) {
         this.isApplicationOpen();
         this.session.FindById(input.target).selectedRows(input.rowIndex);
@@ -284,6 +299,8 @@ export default class SapActionHandler extends StatefulActionHandler {
                 return this.clickToolbarButton(request.input);
             case 'sap.selectTableRow':
                 return this.selectTableRow(request.input);
+            case 'sap.toggleCheckbox':
+                return this.toggleCheckbox(request.input);
             default:
                 throw new Error('Action not found');
         }
