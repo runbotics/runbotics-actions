@@ -103,7 +103,6 @@ export type SAPToggleCheckboxActionInput = {
     target: string;
     checked: boolean;
 };
-export type SAPToggleCheckboxActionOutput = any;
 
 export interface SAPSelectTableRowActionInput {
     target: string;

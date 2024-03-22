@@ -238,13 +238,14 @@ export default class SapActionHandler extends StatefulActionHandler {
      *  @description Changes checkbox tick state to opposite.
      *  @param target - ID of SAP user interface element
      *  @param checked - boolean value of checkbox selection
+     *  @example target: 'wnd[0]/example/target/path'
+     *  @example checked: true
      */
     async toggleCheckbox(
         input: SapTypes.SAPToggleCheckboxActionInput
-    ): Promise<SapTypes.SAPToggleCheckboxActionOutput> {
+    ) {
         this.isApplicationOpen();
         this.session.FindById(input.target).selected = input.checked;
-        return {};
     }
 
     selectTableRow(input: SapTypes.SAPSelectTableRowActionInput) {
