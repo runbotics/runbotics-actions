@@ -11,6 +11,17 @@ export default class SapActionHandler extends StatefulActionHandler {
         super();
     }
 
+    /**
+     *  @name SAP: Start connection
+     *  @description Establishes connection with SAP system using passed user's credentials. 
+     *  @param user - user's login
+     *  @param password - user's password
+     *  @param client - mandant field in SAP logon
+     *  @param connectionName - name to identify the connection with server or group
+     *  @param language - string representing language code
+     *  @example connectionName: 'BE6 [aop014.itdemo.local]'
+     *  @example language: 'PL'
+     */
     async connect(input: SapTypes.SAPConnectActionInput): Promise<SapTypes.SAPConnectActionOutput> {
         const winax = await import('@runbotics/winax');
 
