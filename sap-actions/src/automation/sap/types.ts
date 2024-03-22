@@ -55,6 +55,7 @@ export type SAPConnectActionInput = {
     client: string;
     user: string;
     password: string;
+    language?: string;
 };
 export type SAPConnectActionOutput = Record<string, never>;
 

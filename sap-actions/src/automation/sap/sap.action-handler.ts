@@ -28,6 +28,9 @@ export default class SapActionHandler extends StatefulActionHandler {
             }
             this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = process.env[input.user];
             this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = process.env[input.password];
+            if (input.language) {
+                this.session.FindById('wnd[0]/usr/txtRSYST-LANGU').text = input.language;
+            }
             this.session.FindById('wnd[0]').SendVKey(0);
         } catch (e) {
             throw new Error(e?.description ?? e.message);
