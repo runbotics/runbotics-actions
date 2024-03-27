@@ -1,4 +1,5 @@
 import { DesktopRunRequest } from '@runbotics/runbotics-sdk';
+import { SAPLanguages } from './languages.types';
 
 export type SAPActionRequest =
 | DesktopRunRequest<'sap.connect', SAPConnectActionInput>
@@ -55,6 +56,7 @@ export type SAPConnectActionInput = {
     client: string;
     user: string;
     password: string;
+    language?: SAPLanguages;
 };
 export type SAPConnectActionOutput = Record<string, never>;
 

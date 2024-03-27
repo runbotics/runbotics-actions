@@ -3,6 +3,7 @@ import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 
 import { SendVKeyMapper } from './SendVKeyMapper';
 import * as SapTypes from './types';
+import { LanguageCodes } from './languages.types';
 
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
@@ -11,6 +12,18 @@ export default class SapActionHandler extends StatefulActionHandler {
         super();
     }
 
+    /**
+     *  @name SAP: Start connection
+     *  @description Establishes connection with SAP system using passed user's credentials. 
+     *  @param user - user's login
+     *  @param password - user's password
+     *  @param client - mandant field in SAP logon
+     *  @param connectionName - name to identify the connection with server or group
+     *  @param language - string representing language of interfaces' translations during connection (defined in English). 
+     *  Language should be installed and available in target SAP instance.
+     *  @example connectionName: 'BE6 [aop014.itdemo.local]'
+     *  @example language: 'Polish'
+     */
     async connect(input: SapTypes.SAPConnectActionInput): Promise<SapTypes.SAPConnectActionOutput> {
         const winax = await import('@runbotics/winax');
 
@@ -28,6 +41,9 @@ export default class SapActionHandler extends StatefulActionHandler {
             }
             this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = process.env[input.user];
             this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = process.env[input.password];
+            if (input.language) {
+                this.session.FindById('wnd[0]/usr/txtRSYST-LANGU').text = LanguageCodes[input.language];
+            }
             this.session.FindById('wnd[0]').SendVKey(0);
         } catch (e) {
             throw new Error(e?.description ?? e.message);
