@@ -1,6 +1,13 @@
 export enum SAPLanguages {
     English = 'English',
     Polish = 'Polish',
+    German = 'German',
+
+    /* TODO: extend the enum with all SAP-supported languages */
+    // If language is not installed in target server,
+    // user should be notified when connection is not established
+
+    /*
     Afrikaans = 'Afrikaans',
     Arabic = 'Arabic',
     Bulgarian = 'Bulgarian',
@@ -13,7 +20,6 @@ export enum SAPLanguages {
     Dutch = 'Dutch',
     Finnish = 'Finnish',
     French = 'French',
-    German = 'German',
     Greek = 'Greek',
     Hebrew = 'Hebrew',
     Hungarian = 'Hungarian',
@@ -35,11 +41,15 @@ export enum SAPLanguages {
     Thai = 'Thai',
     Turkish = 'Turkish',
     Ukrainian = 'Ukrainian',
+    */
 };
 
 export const LanguageCodes: Record<SAPLanguages, string> = {
     [SAPLanguages.Polish]: 'PL',
     [SAPLanguages.English]: 'EN',
+    [SAPLanguages.German]: 'DE',
+
+    /*
     [SAPLanguages.Afrikaans]: 'AF',
     [SAPLanguages.Arabic]: 'AR',
     [SAPLanguages.Bulgarian]: 'BG',
@@ -52,7 +62,6 @@ export const LanguageCodes: Record<SAPLanguages, string> = {
     [SAPLanguages.Dutch]: 'NL',
     [SAPLanguages.Finnish]: 'FI',
     [SAPLanguages.French]: 'FR',
-    [SAPLanguages.German]: 'DE',
     [SAPLanguages.Greek]: 'EL',
     [SAPLanguages.Hebrew]: 'HE',
     [SAPLanguages.Hungarian]: 'HU',
@@ -74,4 +83,5 @@ export const LanguageCodes: Record<SAPLanguages, string> = {
     [SAPLanguages.Thai]: 'TH',
     [SAPLanguages.Turkish]: 'TR',
     [SAPLanguages.Ukrainian]: 'UK',
+    */
 };
