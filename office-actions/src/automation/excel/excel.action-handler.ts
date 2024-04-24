@@ -343,14 +343,12 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
         const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
-
         const rowsRange = targetWorksheet.Range(input.cellRange).Rows;
         const rowsCount = rowsRange.Count;
 
         if (input.rowLevel && Number(input.rowLevel) <= 0) {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRowLevel());
         }
-        const rowLevel = input.rowLevel ? Number(input.rowLevel) : 1;
 
         const headerRow = input.headerRow;
         if (headerRow && (Number(headerRow) <= 0 || Number(headerRow) > rowsCount)) {
@@ -358,14 +356,18 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
 
         const rangeValues = [];
+        const startCell = splitCellRange[0]
+        const endCell = splitCellRange[1]
+        const { column: startColumn, row: startRow } = this.getDividedCellCoordinates(startCell);
+        const { column: endColumn, row: endRow } = this.getDividedCellCoordinates(endCell);
 
-        for (let rowIdx = 1; rowIdx <= rowsCount; rowIdx++) {
-            const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
-            const rowValues = rowsRange.Rows(rowIdx).Value()[0];
-
-            if (rowOutlineLevel <= rowLevel) {
-                rangeValues.push(rowValues);
+        for (let rowIdx = startRow; rowIdx <= endRow; rowIdx++) {
+            const rowValues: ExcelCellValue[] = [];
+            for (let columnIdx = startColumn; columnIdx <= endColumn; columnIdx++) {
+                console.log(`${rowIdx} ${columnIdx}:`, targetWorksheet.Cells(rowIdx, columnIdx).Text ?? '');
+                rowValues.push(targetWorksheet.Cells(rowIdx, columnIdx).Text ?? '');
             }
+            rangeValues.push(rowValues);
         }
 
         const htmlTable = this.createHtmlTable(rangeValues, headerRow);
