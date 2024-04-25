@@ -334,8 +334,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRangeFormat());
         }
 
-        const splitCellRange = input.cellRange.split(':');
-        const isSingleCellRange = splitCellRange[0] === splitCellRange[1];
+        const [startCell, endCell] = input.cellRange.split(':');
+        const isSingleCellRange = startCell === endCell;
         if (isSingleCellRange) {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidCellRange());
         }
@@ -350,25 +350,34 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRowLevel());
         }
 
+        const rowLevel = input.rowLevel ? Number(input.rowLevel) : 1;
+
         const headerRow = input.headerRow;
         if (headerRow && (Number(headerRow) <= 0 || Number(headerRow) > rowsCount)) {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRow());
         }
 
         const rangeValues = [];
-        const startCell = splitCellRange[0]
-        const endCell = splitCellRange[1]
+
         const { column: startColumn, row: startRow } = this.getDividedCellCoordinates(startCell);
         const { column: endColumn, row: endRow } = this.getDividedCellCoordinates(endCell);
 
         for (let rowIdx = startRow; rowIdx <= endRow; rowIdx++) {
+            const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
+            if (rowOutlineLevel > rowLevel) {
+                continue;
+            };
+            
             const rowValues: ExcelCellValue[] = [];
+         
             for (let columnIdx = startColumn; columnIdx <= endColumn; columnIdx++) {
                 rowValues.push(targetWorksheet.Cells(rowIdx, columnIdx).Text ?? '');
             }
+
             rangeValues.push(rowValues);
         }
 
+        console.log(rangeValues);
         const htmlTable = this.createHtmlTable(rangeValues, headerRow);
 
         return htmlTable;
