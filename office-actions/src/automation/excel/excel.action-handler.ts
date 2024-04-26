@@ -334,8 +334,8 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRangeFormat());
         }
 
-        const splitCellRange = input.cellRange.split(':');
-        const isSingleCellRange = splitCellRange[0] === splitCellRange[1];
+        const [startCell, endCell] = input.cellRange.split(':');
+        const isSingleCellRange = startCell === endCell;
         if (isSingleCellRange) {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidCellRange());
         }
@@ -343,13 +343,13 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
 
         const targetWorksheet = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name);
-
         const rowsRange = targetWorksheet.Range(input.cellRange).Rows;
         const rowsCount = rowsRange.Count;
 
         if (input.rowLevel && Number(input.rowLevel) <= 0) {
             throw new Error(ExcelErrorMessage.createHtmlTableInvalidRowLevel());
         }
+
         const rowLevel = input.rowLevel ? Number(input.rowLevel) : 1;
 
         const headerRow = input.headerRow;
@@ -359,13 +359,20 @@ export default class ExcelActionHandler extends StatefulActionHandler {
 
         const rangeValues = [];
 
-        for (let rowIdx = 1; rowIdx <= rowsCount; rowIdx++) {
-            const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
-            const rowValues = rowsRange.Rows(rowIdx).Value()[0];
+        const { column: startColumn, row: startRow } = this.getDividedCellCoordinates(startCell);
+        const { column: endColumn, row: endRow } = this.getDividedCellCoordinates(endCell);
 
-            if (rowOutlineLevel <= rowLevel) {
-                rangeValues.push(rowValues);
+        for (let rowIdx = startRow; rowIdx <= endRow; rowIdx++) {
+            const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
+            if (rowOutlineLevel > rowLevel) continue;
+            
+            const rowValues: ExcelCellValue[] = [];
+         
+            for (let columnIdx = startColumn; columnIdx <= endColumn; columnIdx++) {
+                rowValues.push(targetWorksheet.Cells(rowIdx, columnIdx).Text ?? '');
             }
+
+            rangeValues.push(rowValues);
         }
 
         const htmlTable = this.createHtmlTable(rangeValues, headerRow);
