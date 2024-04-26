@@ -364,9 +364,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
 
         for (let rowIdx = startRow; rowIdx <= endRow; rowIdx++) {
             const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
-            if (rowOutlineLevel > rowLevel) {
-                continue;
-            };
+            if (rowOutlineLevel > rowLevel) continue;
             
             const rowValues: ExcelCellValue[] = [];
          
@@ -377,7 +375,6 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             rangeValues.push(rowValues);
         }
 
-        console.log(rangeValues);
         const htmlTable = this.createHtmlTable(rangeValues, headerRow);
 
         return htmlTable;
