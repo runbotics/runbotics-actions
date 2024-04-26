@@ -41,7 +41,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     async open(input: ExcelOpenActionInput): Promise<void> {
         const winax = await import('@runbotics/winax');
         this.session = new winax.Object('Excel.Application', {
-            activate: true,
+            activate: true
         });
         this.session.Workbooks.Open(input.path);
         this.session.Visible = true;
@@ -106,9 +106,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     async setCell(input: ExcelSetCellActionInput): Promise<void> {
         if (input.worksheet) this.checkIsWorksheetNameCorrect(input.worksheet, true);
         try {
-            const cell = this.session
-                .Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name)
-                .Range(input.targetCell);
+            const cell = this.session.Worksheets(input?.worksheet ?? this.session.ActiveSheet.Name).Range(input.targetCell);
 
             cell.Value = input.value;
         } catch (e) {
@@ -211,9 +209,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             const amount = input.amount;
             if (this.isNegativeInteger(amount)) throw new Error();
 
-            targetWorksheet
-                .Range(targetWorksheet.Columns(column), targetWorksheet.Columns(column + amount - 1))
-                .Insert();
+            targetWorksheet.Range(targetWorksheet.Columns(column), targetWorksheet.Columns(column + amount - 1)).Insert();
         } catch (e) {
             throw new Error(ExcelErrorMessage.insertColumnsIncorrectInput());
         }
@@ -228,9 +224,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             const amount = input.amount;
             if (this.isNegativeInteger(amount)) throw new Error();
 
-            targetWorksheet
-                .Range(targetWorksheet.Columns(column + 1), targetWorksheet.Columns(column + amount))
-                .Insert();
+            targetWorksheet.Range(targetWorksheet.Columns(column + 1), targetWorksheet.Columns(column + amount)).Insert();
         } catch (e) {
             throw new Error(ExcelErrorMessage.insertColumnsIncorrectInput());
         }
@@ -247,9 +241,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
 
         try {
-            targetWorksheet
-                .Range(targetWorksheet.Rows(startingRow), targetWorksheet.Rows(startingRow + rowsNumber - 1))
-                .Insert();
+            targetWorksheet.Range(targetWorksheet.Rows(startingRow), targetWorksheet.Rows(startingRow + rowsNumber - 1)).Insert();
         } catch (e) {
             throw new Error(ExcelErrorMessage.insertRowsIncorrectInput());
         }
@@ -283,9 +275,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         }
 
         try {
-            targetWorksheet
-                .Range(targetWorksheet.Rows(startingRow + 1), targetWorksheet.Rows(startingRow + rowsNumber))
-                .Insert();
+            targetWorksheet.Range(targetWorksheet.Rows(startingRow + 1), targetWorksheet.Rows(startingRow + rowsNumber)).Insert();
         } catch (e) {
             throw new Error(ExcelErrorMessage.insertRowsIncorrectInput());
         }
@@ -364,12 +354,11 @@ export default class ExcelActionHandler extends StatefulActionHandler {
 
         for (let rowIdx = startRow; rowIdx <= endRow; rowIdx++) {
             const rowOutlineLevel = rowsRange.Rows(rowIdx).OutlineLevel;
-            if (rowOutlineLevel > rowLevel) {
-                continue;
-            };
+
+            if (rowOutlineLevel > rowLevel) continue;
             
             const rowValues: ExcelCellValue[] = [];
-         
+
             for (let columnIdx = startColumn; columnIdx <= endColumn; columnIdx++) {
                 rowValues.push(targetWorksheet.Cells(rowIdx, columnIdx).Text ?? '');
             }
@@ -377,7 +366,6 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             rangeValues.push(rowValues);
         }
 
-        console.log(rangeValues);
         const htmlTable = this.createHtmlTable(rangeValues, headerRow);
 
         return htmlTable;
@@ -387,9 +375,12 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         const headerRow = row && Number(row) > 0 ? Number(row) - 1 : 0;
         const headers = data[headerRow];
 
-        const tableStyle = 'overflow: auto; border: 1px solid #dededf; height: 100%; table-layout: auto; border-collapse: collapse; border-spacing: 1px;';
-        const thStyle = 'border: 1px solid #dededf; background-color: #eceff1; color: #000000; padding: 5px 15px; text-align: left; height: 20.4pt; white-space: nowrap;';
-        const tdStyle = 'border: 1px solid #dededf; background-color: #ffffff; color: #000000; padding: 5px 15px; text-align: left; height: 14.4pt; white-space: nowrap;';
+        const tableStyle =
+            'overflow: auto; border: 1px solid #dededf; height: 100%; table-layout: auto; border-collapse: collapse; border-spacing: 1px;';
+        const thStyle =
+            'border: 1px solid #dededf; background-color: #eceff1; color: #000000; padding: 5px 15px; text-align: left; height: 20.4pt; white-space: nowrap;';
+        const tdStyle =
+            'border: 1px solid #dededf; background-color: #ffffff; color: #000000; padding: 5px 15px; text-align: left; height: 14.4pt; white-space: nowrap;';
 
         let tableHtml = `<table style="${tableStyle}"><thead><tr>`;
 
@@ -459,12 +450,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
             case 2:
                 return this.session.Run(input.macro, input.functionParams[0], input.functionParams[1]);
             case 3:
-                return this.session.Run(
-                    input.macro,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2]
-                );
+                return this.session.Run(input.macro, input.functionParams[0], input.functionParams[1], input.functionParams[2]);
             case 4:
                 return this.session.Run(
                     input.macro,
@@ -633,9 +619,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
         if (
             (shouldExist && !this.checkIfWorksheetExist(worksheet)) ||
             (!shouldExist &&
-                (this.checkIfWorksheetExist(worksheet) ||
-                    worksheet.length > 31 ||
-                    !worksheet.match(RegexPatterns.EXCEL_WORKSHEET_NAME)))
+                (this.checkIfWorksheetExist(worksheet) || worksheet.length > 31 || !worksheet.match(RegexPatterns.EXCEL_WORKSHEET_NAME)))
         ) {
             throw new Error(ExcelErrorMessage.worksheetIncorrectInput(shouldExist));
         }
@@ -650,12 +634,11 @@ export default class ExcelActionHandler extends StatefulActionHandler {
      */
     private getDividedCellCoordinates(cell: string): CellCoordinates {
         const cellMatch = cell.match(/([A-Z]+)([0-9]+)/);
-        if (!cellMatch || cellMatch.length !== 3)
-            throw new Error(ExcelErrorMessage.divideCellCoordinatesIncorrectInput());
+        if (!cellMatch || cellMatch.length !== 3) throw new Error(ExcelErrorMessage.divideCellCoordinatesIncorrectInput());
 
         return {
             column: this.getColumnCoordinate(cellMatch[1]),
-            row: Number(cellMatch[2]),
+            row: Number(cellMatch[2])
         };
     }
 
@@ -666,8 +649,7 @@ export default class ExcelActionHandler extends StatefulActionHandler {
      * @example getColumnCoordinate('C') // 3
      */
     private getColumnCoordinate(column: string): number {
-        if (!column || typeof column === 'number')
-            throw new Error(ExcelErrorMessage.getColumnCoordinateIncorrectInput());
+        if (!column || typeof column === 'number') throw new Error(ExcelErrorMessage.getColumnCoordinateIncorrectInput());
         return this.session.ActiveSheet.Range(`${column}1`).Column;
     }
 
@@ -748,6 +730,6 @@ export default class ExcelActionHandler extends StatefulActionHandler {
     }
 
     private isNegativeInteger(number: number): boolean {
-        return (Number.isInteger(number) && number < 0)
+        return Number.isInteger(number) && number < 0;
     }
 }
