@@ -1,9 +1,10 @@
 import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 
 
-import { SendVKeyMapper } from './SendVKeyMapper';
+import { SendVKeyMapper } from './utils/SendVKeyMapper';
 import * as SapTypes from './types';
 import { LanguageCodes } from './languages.types';
+import { decrypt } from './utils/decryptor';
 
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
@@ -14,12 +15,12 @@ export default class SapActionHandler extends StatefulActionHandler {
 
     /**
      *  @name SAP: Start connection
-     *  @description Establishes connection with SAP system using passed user's credentials. 
+     *  @description Establishes connection with SAP system using passed user's credentials.
      *  @param user - user's login
      *  @param password - user's password
      *  @param client - mandant field in SAP logon
      *  @param connectionName - name to identify the connection with server or group
-     *  @param language - string representing language of interfaces' translations during connection (defined in English). 
+     *  @param language - string representing language of interfaces' translations during connection (defined in English).
      *  Language should be installed and available in target SAP instance.
      *  @example connectionName: 'BE6 [aop014.itdemo.local]'
      *  @example language: 'Polish'
@@ -39,8 +40,10 @@ export default class SapActionHandler extends StatefulActionHandler {
             if (input.client) {
                 this.session.FindById('wnd[0]/usr/txtRSYST-MANDT').text = input.client;
             }
-            this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = process.env[input.user];
-            this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = process.env[input.password];
+
+            this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = this.getEnvValue(input.user);
+            this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = this.getEnvValue(input.password);
+
             if (input.language) {
                 this.session.FindById('wnd[0]/usr/txtRSYST-LANGU').text = LanguageCodes[input.language];
             }
@@ -52,9 +55,16 @@ export default class SapActionHandler extends StatefulActionHandler {
         return {};
     }
 
+    private getEnvValue(key: string): string | undefined {
+        const envValue = process.env[key];
+        const fullEncKey = process.argv.find((arg) => arg.startsWith('--enc-key='));
+        const encKey = fullEncKey ? fullEncKey.split('=')[1] : '';
+        return (encKey && envValue) ? decrypt(envValue, encKey) : envValue;
+    }
+
     /**
      *  @name SAP: Start Transaction
-     *  @description Opens the transaction view. 
+     *  @description Opens the transaction view.
      *  Available transactions may vary depending on the instance that is being used.
      *  @param transaction - transaction name
      *  @example transaction: 'SE16N'
