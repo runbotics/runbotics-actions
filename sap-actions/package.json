@@ -24,7 +24,7 @@
         "vitest": "^0.34.6"
     },
     "dependencies": {
-        "@runbotics/runbotics-sdk": "^1.2.1",
+        "@runbotics/runbotics-sdk": "^1.2.2",
         "@runbotics/winax": "^3.4.1"
     },
     "files": [
