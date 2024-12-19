@@ -28,8 +28,6 @@ export default class SapActionHandler extends StatefulActionHandler {
     async connect(input: SapTypes.SAPConnectActionInput, credentials: SapTypes.SAPCredential): Promise<SapTypes.SAPConnectActionOutput> {
         const winax = await import('@runbotics/winax');
 
-        if (!credentials) throw new Error('Credentials are not set')
-
         try {
             const app = new winax.Object('SapROTWr.SapROTWrapper');
             const sapGuiAuto = app.GetROTEntry('SAPGUI');
