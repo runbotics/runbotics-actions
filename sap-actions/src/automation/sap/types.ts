@@ -54,8 +54,6 @@ export type SAPSendVKeyActionOutput = Record<string, never>;
 export type SAPConnectActionInput = {
     connectionName: string;
     client: string;
-    user: string;
-    password: string;
     language?: SAPLanguages;
 };
 export type SAPConnectActionOutput = Record<string, never>;
@@ -109,4 +107,9 @@ export type SAPToggleCheckboxActionInput = {
 export interface SAPSelectTableRowActionInput {
     target: string;
     rowIndex: string;
+}
+
+export interface SAPCredential {
+    user: string;
+    password: string;
 }

@@ -4,7 +4,7 @@ import { StatefulActionHandler } from '@runbotics/runbotics-sdk';
 import { SendVKeyMapper } from './utils/SendVKeyMapper';
 import * as SapTypes from './types';
 import { LanguageCodes } from './languages.types';
-import { decrypt } from './utils/decryptor';
+import { credentialAttributesMapper } from './utils/credentialAttributeMapper';
 
 export default class SapActionHandler extends StatefulActionHandler {
     private session = null;
@@ -25,7 +25,7 @@ export default class SapActionHandler extends StatefulActionHandler {
      *  @example connectionName: 'BE6 [aop014.itdemo.local]'
      *  @example language: 'Polish'
      */
-    async connect(input: SapTypes.SAPConnectActionInput): Promise<SapTypes.SAPConnectActionOutput> {
+    async connect(input: SapTypes.SAPConnectActionInput, credentials: SapTypes.SAPCredential): Promise<SapTypes.SAPConnectActionOutput> {
         const winax = await import('@runbotics/winax');
 
         try {
@@ -41,8 +41,8 @@ export default class SapActionHandler extends StatefulActionHandler {
                 this.session.FindById('wnd[0]/usr/txtRSYST-MANDT').text = input.client;
             }
 
-            this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = this.getEnvValue(input.user);
-            this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = this.getEnvValue(input.password);
+            this.session.FindById('wnd[0]/usr/txtRSYST-BNAME').text = credentials.user;
+            this.session.FindById('wnd[0]/usr/pwdRSYST-BCODE').text = credentials.password;
 
             if (input.language) {
                 this.session.FindById('wnd[0]/usr/txtRSYST-LANGU').text = LanguageCodes[input.language];
@@ -53,13 +53,6 @@ export default class SapActionHandler extends StatefulActionHandler {
         }
 
         return {};
-    }
-
-    private getEnvValue(key: string): string | undefined {
-        const envValue = process.env[key];
-        const fullEncKey = process.argv.find((arg) => arg.startsWith('--enc-key='));
-        const encKey = fullEncKey ? fullEncKey.split('=')[1] : '';
-        return (encKey && envValue) ? decrypt(envValue, encKey) : envValue;
     }
 
     /**
@@ -175,7 +168,7 @@ export default class SapActionHandler extends StatefulActionHandler {
     /**
      *  @name SAP: Send Virtual Key
      *  @description Emulates keyboard shortcut.
-     *  @param virtualKey - any keyboard shortcut that is supported 
+     *  @param virtualKey - any keyboard shortcut that is supported
      *  @see SendVKeyMapper - keymap file containing supported shortcuts
      *  @example virtualKey: Enter
      */
@@ -294,7 +287,8 @@ export default class SapActionHandler extends StatefulActionHandler {
 
         switch (request.script) {
             case 'sap.connect':
-                return this.connect(request.input);
+                const credentials = credentialAttributesMapper<SapTypes.SAPCredential>(request.credentials);
+                return this.connect(request.input, credentials);
             case 'sap.startTransaction':
                 return this.startTransaction(request.input);
             case 'sap.endTransaction':
