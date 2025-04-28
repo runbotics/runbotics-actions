@@ -4,6 +4,7 @@ export type PowerPointActionRequest =
 | DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
 | DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
 | DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
+| DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
 | DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
 
 export type PowerPointOpenActionInput = {
@@ -15,6 +16,11 @@ export type PowerPointInsertActionInput = {
     filePath: string;
 };
 export type PowerPointInsertActionOutput = any;
+
+export type PowerPointRunMacroInput = {
+    macro: string;
+    functionParams?: Array<string>;
+};
 
 export type PowerPointSaveActionInput = {};
 export type PowerPointSaveActionOutput = any;
@@ -54,6 +60,109 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         );
     }
 
+    async runMacro(input: PowerPointRunMacroInput) {
+        let macroName = input.macro;
+        const fileName = require("path").basename(this.openedFiles);
+        macroName = `${fileName}!${macroName}`;
+
+        if (input.functionParams === undefined || input.functionParams.length === 0) {
+            return this.session.Run(macroName);
+        }
+
+        switch (input.functionParams.length) {
+            case 1:
+                return this.session.Run(macroName, input.functionParams[0]);
+            case 2:
+                return this.session.Run(macroName, input.functionParams[0], input.functionParams[1]);
+            case 3:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2]
+                );
+            case 4:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3]
+                );
+            case 5:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4]
+                );
+            case 6:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4],
+                    input.functionParams[5]
+                );
+            case 7:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4],
+                    input.functionParams[5],
+                    input.functionParams[6]
+                );
+            case 8:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4],
+                    input.functionParams[5],
+                    input.functionParams[6],
+                    input.functionParams[7]
+                );
+            case 9:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4],
+                    input.functionParams[5],
+                    input.functionParams[6],
+                    input.functionParams[7],
+                    input.functionParams[8]
+                );
+            case 10:
+                return this.session.Run(
+                    macroName,
+                    input.functionParams[0],
+                    input.functionParams[1],
+                    input.functionParams[2],
+                    input.functionParams[3],
+                    input.functionParams[4],
+                    input.functionParams[5],
+                    input.functionParams[6],
+                    input.functionParams[7],
+                    input.functionParams[8],
+                    input.functionParams[9]
+                );
+            default:
+                throw new Error('Macro can have maximum 10 arguments.');
+        }
+    }
+
     async saveAs(
         input: PowerPointSaveActionInput
     ): Promise<PowerPointSaveActionOutput> {
@@ -83,6 +192,8 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
                 return this.open(request.input);
             case "powerpoint.insert":
                 return this.insertSlide(request.input);
+            case "powerpoint.runMacro":
+                return this.runMacro(request.input);
             case "powerpoint.save":
                 return this.saveAs(request.input);
             case "powerpoint.close":
