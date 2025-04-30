@@ -1,3 +1,5 @@
+import { basename } from "path";
+
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
@@ -62,105 +64,16 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
 
     async runMacro(input: PowerPointRunMacroInput) {
         let macroName = input.macro;
-        const fileName = require("path").basename(this.openedFiles);
+        const fileName = basename(this.openedFiles);
         macroName = `${fileName}!${macroName}`;
-
-        if (input.functionParams === undefined || input.functionParams.length === 0) {
-            return this.session.Run(macroName);
+      
+        const params = input.functionParams ?? [];
+      
+        if (params.length > 30) {
+          throw new Error("Macro can have maximum 30 arguments.");
         }
-
-        switch (input.functionParams.length) {
-            case 1:
-                return this.session.Run(macroName, input.functionParams[0]);
-            case 2:
-                return this.session.Run(macroName, input.functionParams[0], input.functionParams[1]);
-            case 3:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2]
-                );
-            case 4:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3]
-                );
-            case 5:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4]
-                );
-            case 6:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4],
-                    input.functionParams[5]
-                );
-            case 7:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4],
-                    input.functionParams[5],
-                    input.functionParams[6]
-                );
-            case 8:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4],
-                    input.functionParams[5],
-                    input.functionParams[6],
-                    input.functionParams[7]
-                );
-            case 9:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4],
-                    input.functionParams[5],
-                    input.functionParams[6],
-                    input.functionParams[7],
-                    input.functionParams[8]
-                );
-            case 10:
-                return this.session.Run(
-                    macroName,
-                    input.functionParams[0],
-                    input.functionParams[1],
-                    input.functionParams[2],
-                    input.functionParams[3],
-                    input.functionParams[4],
-                    input.functionParams[5],
-                    input.functionParams[6],
-                    input.functionParams[7],
-                    input.functionParams[8],
-                    input.functionParams[9]
-                );
-            default:
-                throw new Error('Macro can have maximum 10 arguments.');
-        }
+      
+        return this.session.Run(macroName, ...params);
     }
 
     async saveAs(
