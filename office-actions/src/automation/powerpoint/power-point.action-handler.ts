@@ -1,9 +1,12 @@
+import { basename } from "path";
+
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
 | DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
 | DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
 | DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
+| DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
 | DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
 
 export type PowerPointOpenActionInput = {
@@ -15,6 +18,11 @@ export type PowerPointInsertActionInput = {
     filePath: string;
 };
 export type PowerPointInsertActionOutput = any;
+
+export type PowerPointRunMacroInput = {
+    macro: string;
+    functionParams?: Array<string>;
+};
 
 export type PowerPointSaveActionInput = {};
 export type PowerPointSaveActionOutput = any;
@@ -54,6 +62,20 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         );
     }
 
+    async runMacro(input: PowerPointRunMacroInput) {
+        let macroName = input.macro;
+        const fileName = basename(this.openedFiles);
+        macroName = `${fileName}!${macroName}`;
+      
+        const params = input.functionParams ?? [];
+      
+        if (params.length > 30) {
+          throw new Error("Macro can have maximum 30 arguments.");
+        }
+      
+        return this.session.Run(macroName, ...params);
+    }
+
     async saveAs(
         input: PowerPointSaveActionInput
     ): Promise<PowerPointSaveActionOutput> {
@@ -83,6 +105,8 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
                 return this.open(request.input);
             case "powerpoint.insert":
                 return this.insertSlide(request.input);
+            case "powerpoint.runMacro":
+                return this.runMacro(request.input);
             case "powerpoint.save":
                 return this.saveAs(request.input);
             case "powerpoint.close":
