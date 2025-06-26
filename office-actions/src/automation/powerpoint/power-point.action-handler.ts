@@ -3,11 +3,11 @@ import { basename } from "path";
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
-| DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
-| DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
-| DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
-| DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
-| DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
+    | DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
+    | DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
+    | DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
+    | DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
+    | DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
 
 export type PowerPointOpenActionInput = {
     filePath: string;
@@ -16,6 +16,9 @@ export type PowerPointOpenActionOutput = any;
 
 export type PowerPointInsertActionInput = {
     filePath: string;
+    index?: number;
+    slideStart?: number;
+    slideEnd?: number;
 };
 export type PowerPointInsertActionOutput = any;
 
@@ -58,7 +61,9 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         this.isApplicationOpen();
         this.session.ActivePresentation.Slides.InsertFromFile(
             input.filePath,
-            0
+            input.index,
+            input.slideStart,
+            input.slideEnd
         );
     }
 
@@ -66,13 +71,13 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         let macroName = input.macro;
         const fileName = basename(this.openedFiles);
         macroName = `${fileName}!${macroName}`;
-      
+
         const params = input.functionParams ?? [];
-      
+
         if (params.length > 30) {
-          throw new Error("Macro can have maximum 30 arguments.");
+            throw new Error("Macro can have maximum 30 arguments.");
         }
-      
+
         return this.session.Run(macroName, ...params);
     }
 
