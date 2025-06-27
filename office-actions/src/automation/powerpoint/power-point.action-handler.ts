@@ -59,12 +59,10 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         input: PowerPointInsertActionInput
     ): Promise<PowerPointInsertActionOutput> {
         this.isApplicationOpen();
-        const args: any[] = [input.filePath];
+        const index = input.index ?? 0;
+        const startSlide = input.slideStart ?? 1;
+        const args: any[] = [input.filePath, index, startSlide];
 
-        input.index ? args.push(input.index) : args.push(0);
-        if (input.slideStart !== undefined) {
-            args.push(input.slideStart);
-        }
         if (input.slideEnd !== undefined) {
             args.push(input.slideEnd);
         }
