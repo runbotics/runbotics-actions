@@ -16,9 +16,9 @@ export type PowerPointOpenActionOutput = any;
 
 export type PowerPointInsertActionInput = {
     filePath: string;
-    index?: number;
-    slideStart?: number;
-    slideEnd?: number;
+    index?: number | undefined;
+    slideStart?: number | undefined;
+    slideEnd?: number | undefined;
 };
 export type PowerPointInsertActionOutput = any;
 
@@ -59,12 +59,16 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         input: PowerPointInsertActionInput
     ): Promise<PowerPointInsertActionOutput> {
         this.isApplicationOpen();
-        this.session.ActivePresentation.Slides.InsertFromFile(
-            input.filePath,
-            input.index,
-            input.slideStart,
-            input.slideEnd
-        );
+        const args: any[] = [input.filePath];
+
+        input.index ? args.push(input.index) : args.push(0);
+        if (input.slideStart !== undefined) {
+            args.push(input.slideStart);
+        }
+        if (input.slideEnd !== undefined) {
+            args.push(input.slideEnd);
+        }
+        this.session.ActivePresentation.Slides.InsertFromFile(...args);
     }
 
     async runMacro(input: PowerPointRunMacroInput) {
