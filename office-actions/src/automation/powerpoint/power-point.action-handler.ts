@@ -3,11 +3,11 @@ import { basename } from "path";
 import { DesktopRunRequest, StatefulActionHandler } from "@runbotics/runbotics-sdk";
 
 export type PowerPointActionRequest =
-| DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
-| DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
-| DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
-| DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
-| DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
+    | DesktopRunRequest<'powerpoint.open', PowerPointOpenActionInput>
+    | DesktopRunRequest<'powerpoint.save', PowerPointSaveActionInput>
+    | DesktopRunRequest<'powerpoint.insert', PowerPointInsertActionInput>
+    | DesktopRunRequest<'powerpoint.runMacro', PowerPointRunMacroInput>
+    | DesktopRunRequest<'powerpoint.close', PowerPointCloseActionInput>;
 
 export type PowerPointOpenActionInput = {
     filePath: string;
@@ -16,6 +16,9 @@ export type PowerPointOpenActionOutput = any;
 
 export type PowerPointInsertActionInput = {
     filePath: string;
+    index?: number | undefined;
+    slideStart?: number | undefined;
+    slideEnd?: number | undefined;
 };
 export type PowerPointInsertActionOutput = any;
 
@@ -56,23 +59,27 @@ export default class PowerPointActionHandler extends StatefulActionHandler {
         input: PowerPointInsertActionInput
     ): Promise<PowerPointInsertActionOutput> {
         this.isApplicationOpen();
-        this.session.ActivePresentation.Slides.InsertFromFile(
-            input.filePath,
-            0
-        );
+        const index = input.index ?? 0;
+        const startSlide = input.slideStart ?? 1;
+        const args: any[] = [input.filePath, index, startSlide];
+
+        if (input.slideEnd !== undefined) {
+            args.push(input.slideEnd);
+        }
+        this.session.ActivePresentation.Slides.InsertFromFile(...args);
     }
 
     async runMacro(input: PowerPointRunMacroInput) {
         let macroName = input.macro;
         const fileName = basename(this.openedFiles);
         macroName = `${fileName}!${macroName}`;
-      
+
         const params = input.functionParams ?? [];
-      
+
         if (params.length > 30) {
-          throw new Error("Macro can have maximum 30 arguments.");
+            throw new Error("Macro can have maximum 30 arguments.");
         }
-      
+
         return this.session.Run(macroName, ...params);
     }
 
